@@ -1,13 +1,14 @@
 import express, { Request, Response } from 'express'
 import cors from 'cors'
 import dotenv from 'dotenv'
-import authRoutes from './routes/authRoutes';
 import { readFile } from 'fs/promises';
 import { isAxiosError } from 'axios';
-import { obterPedidoPorOrderId, salvarPedidoMercadoLivre } from './modules/db/pedido';
 import chokidar from 'chokidar'
-import MLApi from './lib/MLApi';
-import { AuthService } from './modules/TokenService';
+import localtunnel from 'localtunnel';
+import { AuthService } from '@/modules/TokenService';
+import authRoutes from '@/routes/authRoutes';
+import { obterPedidoPorOrderId, salvarPedidoMercadoLivre } from '@/modules/db/pedido';
+import MLApi from '@/lib/MLApi';
 
 const authService = new AuthService()
 const app = express()
@@ -70,7 +71,17 @@ watcher.on("add", async (path, stats) => {
             console.log("Erro antes de enviar nota: ", e)
         }
     }
-})
+});
+
+// Executa o localtunnel
+(async () => {
+  const tunnel = await localtunnel({ port: 3000, subdomain: "falcotestes" });
+  tunnel.url;
+
+  tunnel.on("close", () => {
+    console.log("Tunel fechado")
+  });
+})()
 
 app.listen(3000, () => {
     console.log("Servidor rodando na porta 3000")

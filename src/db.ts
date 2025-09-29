@@ -1,7 +1,7 @@
 import sql from "mssql";
 import dotenv from 'dotenv'
 
-dotenv.config()
+dotenv.config({quiet: true})
 
 const sqlConfig: sql.config = {
   user: process.env.DATABASE_USER,

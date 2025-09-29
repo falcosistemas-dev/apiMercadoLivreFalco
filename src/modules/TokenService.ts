@@ -1,7 +1,7 @@
 import axios, { isAxiosError } from "axios"
 import dotenv from 'dotenv'
-import { obterVendedorMercadoLivre } from "./db/vendedor"
-import MLApi from "../lib/MLApi"
+import MLApi from "@/lib/MLApi"
+import { obterVendedorMercadoLivre } from "@/modules/db/vendedor"
 
 interface Token{
     access_token: string
@@ -9,7 +9,7 @@ interface Token{
     created_at: number
 }
 
-dotenv.config()
+dotenv.config({quiet: true})
 
 const CLIENT_ID = process.env.CLIENT_ID
 const CLIENT_SECRET = process.env.CLIENT_SECRET

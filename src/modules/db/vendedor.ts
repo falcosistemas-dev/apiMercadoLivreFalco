@@ -1,4 +1,4 @@
-import { getPool } from "../../db"
+import { getPool } from "@/db"
 
 export async function salvarVendedorMercadoLivre(userId: number, refreshToken: string){
     const pool = await getPool()
