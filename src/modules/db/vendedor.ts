@@ -1,4 +1,9 @@
-import { getPool } from "@/db"
+import { getPool } from "../../db"
+
+interface VendedorMercadoLivre{
+    id_mercadolivre_NM: number,
+    refresh_token_VC: string
+}
 
 export async function salvarVendedorMercadoLivre(userId: number, refreshToken: string){
     const pool = await getPool()
@@ -14,7 +19,7 @@ export async function obterVendedorMercadoLivre(userId: number){
     const result = await pool
         .request()
         .input("id_mercadolivre_NM", userId)
-        .execute("ObterVendedorPorId")
+        .execute<VendedorMercadoLivre>("ObterVendedorPorId")
 
     if (result.recordset.length > 0){
         return result.recordset[0]

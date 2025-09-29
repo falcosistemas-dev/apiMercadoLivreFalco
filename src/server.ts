@@ -5,10 +5,10 @@ import { readFile } from 'fs/promises';
 import { isAxiosError } from 'axios';
 import chokidar from 'chokidar'
 import localtunnel from 'localtunnel';
-import { AuthService } from '@/modules/TokenService';
-import authRoutes from '@/routes/authRoutes';
-import { obterPedidoPorOrderId, salvarPedidoMercadoLivre } from '@/modules/db/pedido';
-import MLApi from '@/lib/MLApi';
+import authRoutes from './routes/authRoutes';
+import { AuthService } from './modules/TokenService';
+import MLApi from './lib/MLApi';
+import { obterPedidoPorOrderId, salvarPedidoMercadoLivre } from './modules/db/pedido';
 
 const authService = new AuthService()
 const app = express()

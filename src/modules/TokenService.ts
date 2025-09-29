@@ -1,7 +1,7 @@
 import axios, { isAxiosError } from "axios"
 import dotenv from 'dotenv'
-import MLApi from "@/lib/MLApi"
-import { obterVendedorMercadoLivre } from "@/modules/db/vendedor"
+import { obterVendedorMercadoLivre } from "./db/vendedor"
+import MLApi from "../lib/MLApi"
 
 interface Token{
     access_token: string
@@ -29,7 +29,7 @@ export class AuthService{
     }
 
     private async renovarToken(userId: number){
-        const refreshToken = (await obterVendedorMercadoLivre(userId)).refresh_token_VC
+        const refreshToken = (await obterVendedorMercadoLivre(userId))?.refresh_token_VC
             try{
                 const { data } = await MLApi.post("/oauth/token", {
                     grant_type: "refresh_token",

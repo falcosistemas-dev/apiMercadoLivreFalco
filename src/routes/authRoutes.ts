@@ -1,6 +1,6 @@
-import MLApi from "@/lib/MLApi";
-import { salvarVendedorMercadoLivre } from "@/modules/db/vendedor";
 import { Router, Request, Response } from "express";
+import MLApi from "../lib/MLApi";
+import { salvarVendedorMercadoLivre } from "../modules/db/vendedor";
 
 const router = Router()
 
