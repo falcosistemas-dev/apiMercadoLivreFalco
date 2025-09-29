@@ -4,15 +4,15 @@ CREATE PROCEDURE SalvarVendedorMercadoLivre
 AS
 BEGIN
     SET NOCOUNT ON;
-    IF EXISTS (SELECT 1 FROM vendedores_T WHERE id_mercadolivre_NM = @user_id_mercado_livre_NM)
+    IF EXISTS (SELECT 1 FROM vendedores_mercadolivre_T WHERE id_mercadolivre_NM = @id_mercadolivre_NM)
     BEGIN
-        UPDATE vendedores_T
+        UPDATE vendedores_mercadolivre_T
         SET refresh_token_VC = @refresh_token_VC
-        WHERE id_mercadolivre_NM = @user_id_mercado_livre_NM
+        WHERE id_mercadolivre_NM = @id_mercadolivre_NM
     END
     ELSE
     BEGIN
-        INSERT INTO vendedores_T(id_mercadolivre_NM, refresh_token_VC) VALUES (@user_id_mercado_livre_NM, @refresh_token_VC);
+        INSERT INTO vendedores_mercadolivre_T(id_mercadolivre_NM, refresh_token_VC) VALUES (@id_mercadolivre_NM, @refresh_token_VC);
     END
 END;
 GO
