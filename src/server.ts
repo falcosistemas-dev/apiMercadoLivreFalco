@@ -3,11 +3,11 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 import authRoutes from './routes/authRoutes';
 import { readFile } from 'fs/promises';
-import axios, { isAxiosError } from 'axios';
-import { AuthService } from './modules/authService';
-import { obterPedidoPorOrderId, salvarPedido } from './modules/db/orders';
-import { watch } from 'fs';
+import { isAxiosError } from 'axios';
+import { obterPedidoPorOrderId, salvarPedidoMercadoLivre } from './modules/db/pedido';
 import chokidar from 'chokidar'
+import MLApi from './lib/MLApi';
+import { AuthService } from './modules/TokenService';
 
 const authService = new AuthService()
 const app = express()
@@ -17,22 +17,22 @@ app.use(express.json())
 app.use(authRoutes)
 
 app.post("/notificacoes", async (req: Request, res: Response) => {
-    console.log("Notificação recebida:", req.body);
+    console.log("Notificação recebida:", req.body?.topic);
     const userId = req.body.user_id as number
     const topic = req.body.topic as string
     const resource = req.body.resource as string
     if(topic === "orders_v2"){
         const orderId = parseInt(resource.split("/")[2])
-        console.log("orderId", orderId)
         let accessToken = await authService.obterToken(userId)
         try{
-            const response = await axios.get(`https://api.mercadolibre.com/orders/${orderId}`, {
+            const response = await MLApi.get(`/orders/${orderId}`, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
-                }
+                },
+                
             })
 
-            await salvarPedido(userId, orderId, response.data.shipping.id)
+            await salvarPedidoMercadoLivre(userId, orderId, response.data.shipping.id)
         }catch(e){
             if(isAxiosError(e)){
                 console.log(e.status, " - ", e.response?.data)
@@ -53,11 +53,10 @@ watcher.on("add", async (path, stats) => {
     }
 
     const pedido = await obterPedidoPorOrderId(orderId)
-    console.log("pedido ", pedido)
-    let accessToken = await authService.obterToken(pedido.id_vendedor_mercadolivre_NM)
-    const shipmentId = pedido.shipment_id_NM as number
+    let accessToken = await authService.obterToken(pedido?.id_vendedor_mercadolivre_NM as number)
+    const shipmentId = pedido?.shipment_id_NM as number
     try{
-        await axios.post(`https://api.mercadolibre.com/shipments/${shipmentId}/invoice_data/?siteId=MLB`, content, {
+        await MLApi.post(`/shipments/${shipmentId}/invoice_data/?siteId=MLB`, content, {
             headers: {
                 "Content-Type": "text/xml",
                 Authorization: `Bearer ${accessToken}`
@@ -71,34 +70,6 @@ watcher.on("add", async (path, stats) => {
             console.log("Erro antes de enviar nota: ", e)
         }
     }
-})
-
-app.post("/enviarNota/:orderId", async (req: Request, res: Response) => {
-    const content = await readFile("./notas-xml/test.xml", 'utf-8')
-    const orderId = parseInt(req.params.orderId)
-
-    const pedido = await obterPedidoPorOrderId(orderId)
-    console.log("pedido ", pedido)
-    let accessToken = await authService.obterToken(pedido.id_vendedor_mercadolivre_NM)
-    const shipmentId = pedido.shipment_id_NM as number
-    try{
-        await axios.post(`https://api.mercadolibre.com/shipments/${shipmentId}/invoice_data/?siteId=MLB`, content, {
-            headers: {
-                "Content-Type": "text/xml",
-                Authorization: `Bearer ${accessToken}`
-            }
-        })
-        console.log("Nota enviada com sucesso")
-        res.sendStatus(200)
-    }catch(e){
-        if(isAxiosError(e)){
-            console.log(e.status," - ", e.response?.data.message)
-            res.status(400).send(e.response?.data)
-        }else{
-            console.log("Erro antes de enviar nota: ", e)
-        }
-    }
-
 })
 
 app.listen(3000, () => {

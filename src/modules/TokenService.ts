@@ -1,6 +1,7 @@
 import axios, { isAxiosError } from "axios"
 import dotenv from 'dotenv'
-import { obterVendedorMercadoLivre } from "./db/auth"
+import { obterVendedorMercadoLivre } from "./db/vendedor"
+import MLApi from "../lib/MLApi"
 
 interface Token{
     access_token: string
@@ -30,7 +31,7 @@ export class AuthService{
     private async renovarToken(userId: number){
         const refreshToken = (await obterVendedorMercadoLivre(userId)).refresh_token_VC
             try{
-                const { data } = await axios.post("https://api.mercadolibre.com/oauth/token", {
+                const { data } = await MLApi.post("/oauth/token", {
                     grant_type: "refresh_token",
                     client_id: CLIENT_ID,
                     client_secret: CLIENT_SECRET,
@@ -38,7 +39,7 @@ export class AuthService{
                 })
 
                 this.tokenCache[userId] = {access_token: data.access_token, expires_in: data.expires_in, created_at: Date.now()}
-                console.log("Renovando token de usuario ", userId)
+
                 return this.tokenCache[userId].access_token
             }catch(e){
                 if(isAxiosError(e)){
@@ -51,6 +52,3 @@ export class AuthService{
         return Date.now() > this.tokenCache[userId].created_at + this.tokenCache[userId].expires_in
     }
 }
-
-const test = new AuthService()
-

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { Router, Request, Response } from "express";
-import { salvarVendedorMercadoLivre } from "../modules/db/auth";
+import { salvarVendedorMercadoLivre } from "../modules/db/vendedor";
+import MLApi from "../lib/MLApi";
 
 const router = Router()
 
@@ -20,7 +21,7 @@ router.get("/callback", async (req: Request, res: Response) => {
     code = String(req.query.code);
 
     try {
-        const response = await axios.post("https://api.mercadolibre.com/oauth/token", null, {
+        const response = await MLApi.post("/oauth/token", null, {
             params: {
             grant_type: "authorization_code",
             client_id: CLIENT_ID,
