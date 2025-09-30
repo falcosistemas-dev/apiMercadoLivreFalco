@@ -1,7 +1,7 @@
 import axios, { isAxiosError } from "axios"
 import dotenv from 'dotenv'
 import { obterVendedorMercadoLivre } from "./db/vendedor"
-import MLApi from "../lib/MLApi"
+import MLApi from "./MLApi"
 
 interface Token{
     access_token: string
@@ -14,15 +14,15 @@ dotenv.config({quiet: true})
 const CLIENT_ID = process.env.CLIENT_ID
 const CLIENT_SECRET = process.env.CLIENT_SECRET
 
-export class AuthService{
-    private tokenCache: Record<number, Token> = {}
+export class TokenService{
+    private static tokenCache: Record<number, Token> = {}
 
     constructor(){}
 
     async obterToken(userId: number){
-        if(this.tokenCache[userId] && !this.isTokenExpired(userId)){
+        if(TokenService.tokenCache[userId] && !this.isTokenExpired(userId)){
             console.log("Utilizando token cache de usuario ", userId)
-            return this.tokenCache[userId].access_token
+            return TokenService.tokenCache[userId].access_token
         }else{
             return this.renovarToken(userId)
         }
@@ -38,17 +38,19 @@ export class AuthService{
                     refresh_token: refreshToken
                 })
 
-                this.tokenCache[userId] = {access_token: data.access_token, expires_in: data.expires_in, created_at: Date.now()}
+                TokenService.tokenCache[userId] = {access_token: data.access_token, expires_in: data.expires_in, created_at: Date.now()}
 
-                return this.tokenCache[userId].access_token
+                return TokenService.tokenCache[userId].access_token
             }catch(e){
                 if(isAxiosError(e)){
                     console.error("Erro ao renovar token: ", e.status, " - ", e.response?.data.message)
+                }else{
+                    console.error("Erro ao renovar token: ", e)
                 }
             }
     }
 
     private isTokenExpired(userId: number): boolean{
-        return Date.now() > this.tokenCache[userId].created_at + this.tokenCache[userId].expires_in
+        return Date.now() > TokenService.tokenCache[userId].created_at + TokenService.tokenCache[userId].expires_in
     }
 }

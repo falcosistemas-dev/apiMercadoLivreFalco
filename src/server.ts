@@ -6,46 +6,23 @@ import { isAxiosError } from 'axios';
 import chokidar from 'chokidar'
 import localtunnel from 'localtunnel';
 import authRoutes from './routes/authRoutes';
-import { AuthService } from './modules/TokenService';
-import MLApi from './lib/MLApi';
+import notificacaoRoutes from './routes/notificacaoRoutes';
+import MLApi from './modules/MLApi';
 import { obterPedidoPorOrderId, salvarPedidoMercadoLivre } from './modules/db/pedido';
+import { TokenService } from './modules/TokenService';
 
-const authService = new AuthService()
 const app = express()
 dotenv.config()
 app.use(cors())
 app.use(express.json())
 app.use(authRoutes)
+app.use(notificacaoRoutes)
 
-app.post("/notificacoes", async (req: Request, res: Response) => {
-    console.log("Notificação recebida:", req.body?.topic);
-    const userId = req.body.user_id as number
-    const topic = req.body.topic as string
-    const resource = req.body.resource as string
-    if(topic === "orders_v2"){
-        const orderId = parseInt(resource.split("/")[2])
-        let accessToken = await authService.obterToken(userId)
-        try{
-            const response = await MLApi.get(`/orders/${orderId}`, {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                },
-                
-            })
+const NFE_PATH = String(process.env.NFE_PATH)
 
-            await salvarPedidoMercadoLivre(userId, orderId, response.data.shipping.id)
-        }catch(e){
-            if(isAxiosError(e)){
-                console.log(e.status, " - ", e.response?.data)
-            }else{
-                console.error("Erro ao salvar pedido: ", e)
-            }
-        }
-    }
-    res.sendStatus(200);
-});
+const tokenService = new TokenService()
 
-const watcher = chokidar.watch("notas-xml", {ignored: (file) => !file.endsWith('xml')})
+const watcher = chokidar.watch(NFE_PATH, {ignored: (file) => !file.endsWith('xml')})
 watcher.on("add", async (path, stats) => {
     const content = await readFile(path, 'utf-8')
     let orderId = 0
@@ -54,7 +31,7 @@ watcher.on("add", async (path, stats) => {
     }
 
     const pedido = await obterPedidoPorOrderId(orderId)
-    let accessToken = await authService.obterToken(pedido?.id_vendedor_mercadolivre_NM as number)
+    let accessToken = await tokenService.obterToken(pedido?.id_vendedor_mercadolivre_NM as number)
     const shipmentId = pedido?.shipment_id_NM as number
     try{
         await MLApi.post(`/shipments/${shipmentId}/invoice_data/?siteId=MLB`, content, {
@@ -65,9 +42,7 @@ watcher.on("add", async (path, stats) => {
         })
         console.log("Nota enviada com sucesso")
     }catch(e){
-        if(isAxiosError(e)){
-            console.log(e.status," - ", e.response?.data.message)
-        }else{
+        if(!isAxiosError(e)){
             console.log("Erro antes de enviar nota: ", e)
         }
     }

@@ -1,5 +1,5 @@
 import { Router, Request, Response } from "express";
-import MLApi from "../lib/MLApi";
+import MLApi from "../modules/MLApi";
 import { salvarVendedorMercadoLivre } from "../modules/db/vendedor";
 
 const router = Router()
