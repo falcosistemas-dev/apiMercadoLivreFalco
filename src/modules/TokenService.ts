@@ -1,7 +1,8 @@
 import axios, { isAxiosError } from "axios"
 import dotenv from 'dotenv'
 import { obterVendedorMercadoLivre } from "./db/vendedor"
-import MLApi from "./MLApi"
+import MLApi from "./mercado-livre/MLApi"
+import { globais } from "../globais"
 
 interface Token{
     access_token: string
@@ -9,17 +10,12 @@ interface Token{
     created_at: number
 }
 
-dotenv.config({quiet: true})
-
-const CLIENT_ID = process.env.CLIENT_ID
-const CLIENT_SECRET = process.env.CLIENT_SECRET
-
-export class TokenService{
+export default class TokenService{
     private static tokenCache: Record<number, Token> = {}
 
     constructor(){}
 
-    async obterToken(userId: number){
+    static async obterToken(userId: number){
         if(TokenService.tokenCache[userId] && !this.isTokenExpired(userId)){
             console.log("Utilizando token cache de usuario ", userId)
             return TokenService.tokenCache[userId].access_token
@@ -28,13 +24,14 @@ export class TokenService{
         }
     }
 
-    private async renovarToken(userId: number){
+
+    private static async renovarToken(userId: number){
         const refreshToken = (await obterVendedorMercadoLivre(userId))?.refresh_token_VC
             try{
                 const { data } = await MLApi.post("/oauth/token", {
                     grant_type: "refresh_token",
-                    client_id: CLIENT_ID,
-                    client_secret: CLIENT_SECRET,
+                    client_id: globais.CLIENT_ID,
+                    client_secret: globais.CLIENT_SECRET,
                     refresh_token: refreshToken
                 })
 
@@ -50,7 +47,7 @@ export class TokenService{
             }
     }
 
-    private isTokenExpired(userId: number): boolean{
+    private static isTokenExpired(userId: number): boolean{
         return Date.now() > TokenService.tokenCache[userId].created_at + TokenService.tokenCache[userId].expires_in
     }
 }

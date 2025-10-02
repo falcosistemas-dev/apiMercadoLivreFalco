@@ -1,3 +1,9 @@
+# Rodar o projeto no cliente
+1. Para rodar o projeto devemos primeiro instalar o Node.js (Versão 22 ou acima) caso a máquina ainda não possua. [Acesse o link de download do Node.js](https://nodejs.org/pt/download)
+
+![Página de download do Node](image.png)
+
+
 ## Vendedor
 ```json
 {

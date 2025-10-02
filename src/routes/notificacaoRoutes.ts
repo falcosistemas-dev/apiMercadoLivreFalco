@@ -1,12 +1,10 @@
 import { Router, Request, Response } from "express";
-import { TokenService } from "../modules/TokenService";
-import MLApi from "../modules/MLApi";
+import MLApi from "../modules/mercado-livre/MLApi";
 import { isAxiosError } from "axios";
 import { salvarPedidoMercadoLivre } from "../modules/db/pedido";
+import TokenService from "../modules/TokenService";
 
 const router = Router()
-
-const tokenService = new TokenService()
 
 router.post("/notificacoes", async (req: Request, res: Response) => {
     console.log("Notificação recebida:", req.body?.topic);
@@ -15,7 +13,7 @@ router.post("/notificacoes", async (req: Request, res: Response) => {
     const resource = req.body.resource as string
     if(topic === "orders_v2"){
         const orderId = parseInt(resource.split("/")[2])
-        let accessToken = await tokenService.obterToken(userId)
+        let accessToken = await TokenService.obterToken(userId)
         try{
             const response = await MLApi.get(`/orders/${orderId}`, {
                 headers: {

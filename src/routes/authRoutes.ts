@@ -1,32 +1,32 @@
 import { Router, Request, Response } from "express";
-import MLApi from "../modules/MLApi";
+import MLApi from "../modules/mercado-livre/MLApi";
 import { salvarVendedorMercadoLivre } from "../modules/db/vendedor";
+import { globais } from "../globais";
 
 const router = Router()
 
-const CLIENT_ID = process.env.CLIENT_ID
-const CLIENT_SECRET = process.env.CLIENT_SECRET
-const REDIRECT_URI = process.env.REDIRECT_URI
-
+// Redireciona para login do Mercado Livre
 router.get('/login', (req: Request, res: Response) => {
-    const strUrl = `https://auth.mercadolivre.com.br/authorization?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}`
-    res.redirect(strUrl)
+    const url = `https://auth.mercadolivre.com.br/authorization?response_type=code&client_id=${globais.CLIENT_ID}&redirect_uri=${globais.REDIRECT_URI}`
+    res.redirect(url)
 })
 
+// Rota necessária pelo Mercado Livre para o vendedor autorizar o uso de suas informações
 router.get("/callback", async (req: Request, res: Response) => {
     let code: string
     let userId: number
     let refreshToken: string
     code = String(req.query.code);
 
+    // Autoriza o vendedor na API do Mercado Livre, recebe e armazena o id e refresh token desse vendedor
     try {
         const response = await MLApi.post("/oauth/token", null, {
             params: {
             grant_type: "authorization_code",
-            client_id: CLIENT_ID,
-            client_secret: CLIENT_SECRET,
+            client_id: globais.CLIENT_ID,
+            client_secret: globais.CLIENT_SECRET,
             code: code,
-            redirect_uri: REDIRECT_URI,
+            redirect_uri: globais.REDIRECT_URI,
             },
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
         });

@@ -7,22 +7,19 @@ import chokidar from 'chokidar'
 import localtunnel from 'localtunnel';
 import authRoutes from './routes/authRoutes';
 import notificacaoRoutes from './routes/notificacaoRoutes';
-import MLApi from './modules/MLApi';
-import { obterPedidoPorOrderId, salvarPedidoMercadoLivre } from './modules/db/pedido';
-import { TokenService } from './modules/TokenService';
+import MLApi from './modules/mercado-livre/MLApi';
+import { obterPedidoPorOrderId } from './modules/db/pedido';
+import { globais } from './globais';
+import TokenService from './modules/TokenService';
 
 const app = express()
-dotenv.config()
+
 app.use(cors())
 app.use(express.json())
 app.use(authRoutes)
 app.use(notificacaoRoutes)
 
-const NFE_PATH = String(process.env.NFE_PATH)
-
-const tokenService = new TokenService()
-
-const watcher = chokidar.watch(NFE_PATH, {ignored: (file) => !file.endsWith('xml')})
+const watcher = chokidar.watch(globais.CAMINHO_NFE, {ignored: (file) => !file.endsWith('xml')})
 watcher.on("add", async (path, stats) => {
     const content = await readFile(path, 'utf-8')
     let orderId = 0
@@ -31,7 +28,7 @@ watcher.on("add", async (path, stats) => {
     }
 
     const pedido = await obterPedidoPorOrderId(orderId)
-    let accessToken = await tokenService.obterToken(pedido?.id_vendedor_mercadolivre_NM as number)
+    const accessToken = await TokenService.obterToken(pedido?.id_vendedor_mercadolivre_NM as number)
     const shipmentId = pedido?.shipment_id_NM as number
     try{
         await MLApi.post(`/shipments/${shipmentId}/invoice_data/?siteId=MLB`, content, {

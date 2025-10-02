@@ -1,13 +1,11 @@
 import sql from "mssql";
-import dotenv from 'dotenv'
-
-dotenv.config({quiet: true})
+import { globais } from "./globais";
 
 const sqlConfig: sql.config = {
-  user: process.env.DATABASE_USER,
-  password: process.env.DATABASE_PASSWORD,
-  database: process.env.DATABASE_NAME,
-  server: String(process.env.DATABASE_HOST),
+  user: globais.DATABASE_USER,
+  password: globais.DATABASE_PASSWORD,
+  database: globais.DATABASE_NAME,
+  server: globais.DATABASE_SERVER,
   options: {
     encrypt: false,
     trustServerCertificate: true
