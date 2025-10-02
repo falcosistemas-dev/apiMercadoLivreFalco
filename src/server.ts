@@ -5,44 +5,31 @@ import { readFile } from 'fs/promises';
 import { isAxiosError } from 'axios';
 import chokidar from 'chokidar'
 import localtunnel from 'localtunnel';
-import authRoutes from './routes/authRoutes';
-import notificacaoRoutes from './routes/notificacaoRoutes';
 import MLApi from './modules/mercado-livre/MLApi';
 import { obterPedidoPorOrderId } from './modules/db/pedido';
 import { globais } from './globais';
 import TokenService from './modules/TokenService';
+import rotasML from './routes/rotasML';
+import MLService from './modules/mercado-livre/MLService';
 
 const app = express()
 
 app.use(cors())
 app.use(express.json())
-app.use(authRoutes)
-app.use(notificacaoRoutes)
+
+app.use(rotasML)
+
+const mlService = new MLService()
 
 const watcher = chokidar.watch(globais.CAMINHO_NFE, {ignored: (file) => !file.endsWith('xml')})
-watcher.on("add", async (path, stats) => {
-    const content = await readFile(path, 'utf-8')
-    let orderId = 0
+watcher.on("add", async (path) => {
     if(path.match(/\d+/)){
-        orderId = parseInt(path.replace(/\D/g, ""))
+        const orderId = parseInt(path.replace(/\D/g, ""))
+        const content = await readFile(path, 'utf-8')
+
+        await mlService.enviarNota(orderId, content)
     }
 
-    const pedido = await obterPedidoPorOrderId(orderId)
-    const accessToken = await TokenService.obterToken(pedido?.id_vendedor_mercadolivre_NM as number)
-    const shipmentId = pedido?.shipment_id_NM as number
-    try{
-        await MLApi.post(`/shipments/${shipmentId}/invoice_data/?siteId=MLB`, content, {
-            headers: {
-                "Content-Type": "text/xml",
-                Authorization: `Bearer ${accessToken}`
-            }
-        })
-        console.log("Nota enviada com sucesso")
-    }catch(e){
-        if(!isAxiosError(e)){
-            console.log("Erro antes de enviar nota: ", e)
-        }
-    }
 });
 
 // Executa o localtunnel
