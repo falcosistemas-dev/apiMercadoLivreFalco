@@ -36,11 +36,12 @@ const envioErros = {
     malformed_XML: "O arquivo XML enviado possui algum erro de sintax ou estrutura"
 }
 
+// Verifica se o erro retornado é conhecido, senão retorna a mensagem original do erro
 export default function obterMotivoFalhaEnvio(e: AxiosError){
     const responseData = e.response?.data as any
     const error = responseData.error as string
     
-    // Verifica se o erro retornado é conhecido
+    
     if(Object.keys(envioErros).includes(error)){
         return envioErros[error as keyof typeof envioErros]
     }

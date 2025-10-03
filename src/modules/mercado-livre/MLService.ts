@@ -5,7 +5,7 @@ import { salvarVendedorMercadoLivre } from "../db/vendedor";
 import TokenService from "../TokenService";
 import { obterPedidoPorOrderId, salvarPedidoMercadoLivre } from "../db/pedido";
 import { isAxiosError } from "axios";
-import obterMotivoFalhaEnvio from "./formatarErroEnvioNota";
+import obterMotivoFalhaEnvio from "./obterErroEnvioNota";
 import { salvarHistoricoNota } from "../db/historico";
 import DatabaseError from "../db/DatabaseError";
 import { Logger } from "../Logger";
