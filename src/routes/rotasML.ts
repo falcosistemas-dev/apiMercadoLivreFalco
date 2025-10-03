@@ -1,6 +1,7 @@
 import { Router, Request, Response } from "express";
 import MLService from "../modules/mercado-livre/MLService";
 import { globais } from "../globais";
+import { isAxiosError } from "axios";
 
 const rotasML = Router()
 const mlService = new MLService()
@@ -13,8 +14,20 @@ rotasML.get('/login', (req: Request, res: Response) => {
 
 // Rota necessária pelo Mercado Livre para o vendedor autorizar o uso de suas informações
 rotasML.get("/callback", async (req: Request, res: Response) => {
-    const code = String(req.query.code)
-    await mlService.callback(code)
+    try{
+        const code = String(req.query.code)
+        await mlService.callback(code)
+        res.sendStatus(200)
+    }catch(e){
+        if(isAxiosError(e)){
+            console.log(e.status, " - ", e.response?.data.message)
+            res.sendStatus(Number(e.status))
+            return
+        }else{
+            console.log(e)
+        }
+        res.sendStatus(500)
+    }
 });
 
 // Rota que recebe notificação quando um novo pedido/envio é criado
@@ -23,7 +36,13 @@ rotasML.post("/notificacoes", async (req: Request, res: Response) => {
     const topic = String(req.body.topic)
     const resource = String(req.body.resource)
 
-    await mlService.notificacao(userId, topic, resource)
+    try{
+        await mlService.notificacao(userId, topic, resource)
+        res.sendStatus(200)
+    }catch(e){
+        res.sendStatus(500)
+    }
+
 });
 
 export default rotasML;

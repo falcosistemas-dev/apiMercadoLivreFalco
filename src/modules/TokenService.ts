@@ -1,6 +1,6 @@
 import axios, { isAxiosError } from "axios"
 import dotenv from 'dotenv'
-import { obterVendedorMercadoLivre } from "./db/vendedor"
+import { obterVendedorPorId } from "./db/vendedor"
 import MLApi from "./mercado-livre/MLApi"
 import { globais } from "../globais"
 
@@ -11,22 +11,20 @@ interface Token{
 }
 
 export default class TokenService{
-    private static tokenCache: Record<number, Token> = {}
+    private static tokenCache: Record<number, Token> = {} // Isso diminui a quantidade de vezes que é necessário chamar a API do ML para obter tokens
 
-    constructor(){}
-
-    static async obterToken(userId: number){
+    // Verifica se o access token ainda é válido, senão renova
+    public static async obterToken(userId: number){
         if(TokenService.tokenCache[userId] && !this.isTokenExpired(userId)){
-            console.log("Utilizando token cache de usuario ", userId)
             return TokenService.tokenCache[userId].access_token
         }else{
             return this.renovarToken(userId)
         }
     }
 
-
+    // Renova access_token através do refresh_token armazenado
     private static async renovarToken(userId: number){
-        const refreshToken = (await obterVendedorMercadoLivre(userId))?.refresh_token_VC
+        const refreshToken = (await obterVendedorPorId(userId))?.refresh_token_VC
             try{
                 const { data } = await MLApi.post("/oauth/token", {
                     grant_type: "refresh_token",
@@ -47,6 +45,7 @@ export default class TokenService{
             }
     }
 
+    // Verifica se o access_token expirou
     private static isTokenExpired(userId: number): boolean{
         return Date.now() > TokenService.tokenCache[userId].created_at + TokenService.tokenCache[userId].expires_in
     }
