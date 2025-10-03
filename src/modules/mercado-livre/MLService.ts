@@ -8,42 +8,61 @@ import { isAxiosError } from "axios";
 import obterMotivoFalhaEnvio from "./formatarErroEnvioNota";
 import { salvarHistoricoNota } from "../db/historico";
 import DatabaseError from "../db/DatabaseError";
+import { Logger } from "../Logger";
 
 export default class MLService{
     public async callback(code: string){
         let userId: number
         let refreshToken: string
 
-        // Autoriza o vendedor na API do Mercado Livre, recebe e armazena o id e refresh_token desse vendedor
-        const response = await MLApi.post("/oauth/token", null, {
-            params: {
-            grant_type: "authorization_code",
-            client_id: globais.CLIENT_ID,
-            client_secret: globais.CLIENT_SECRET,
-            code: code,
-            redirect_uri: globais.REDIRECT_URI,
-            },
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        });
+        try{
+            // Autoriza o vendedor na API do Mercado Livre, recebe e armazena o id e refresh_token desse vendedor
+            const response = await MLApi.post("/oauth/token", null, {
+                params: {
+                grant_type: "authorization_code",
+                client_id: globais.CLIENT_ID,
+                client_secret: globais.CLIENT_SECRET,
+                code: code,
+                redirect_uri: globais.REDIRECT_URI,
+                },
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            });
+    
+            userId = response.data.user_id
+            refreshToken = response.data.refresh_token
+    
+            await salvarVendedorMercadoLivre(userId, refreshToken)
+        }catch(e: any){
+            if(isAxiosError(e) && e.status === 400){
+                Logger.error(`Erro no callback: ${e.response?.data.message}`, e)
+            }else{
+                Logger.error(`Erro ao salvar vendedor no callback: ${e.message}`, e)
+            }
+        }
 
-        userId = response.data.user_id
-        refreshToken = response.data.refresh_token
-
-        await salvarVendedorMercadoLivre(userId, refreshToken)
     }
 
     public async notificacao(userId: number, topic: string, resource: string){
         if(topic === "orders_v2"){
             const orderId = parseInt(resource.split("/")[2])
-            let accessToken = await TokenService.obterToken(userId)
 
-            const response = await MLApi.get(`/orders/${orderId}`, {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                },
-            })
-
-            await salvarPedidoMercadoLivre(userId, orderId, response.data.shipping.id)
+            try{
+                let accessToken = await TokenService.obterToken(userId)
+    
+                const response = await MLApi.get(`/orders/${orderId}`, {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`
+                    },
+                })
+    
+                await salvarPedidoMercadoLivre(userId, orderId, response.data.shipping.id)
+            }catch(e: any){
+                if(isAxiosError(e) && e.status === 400){
+                    Logger.error(`Erro ao obter info do pedido ${orderId} pelas notificações: ${e.response?.data.message}`, e)
+                }else{
+                    Logger.error(`Erro ao salvar info do pedido ${orderId} pelas notificações: ${e.message}`, e)
+                }
+            }
         }
     }
     
@@ -59,17 +78,17 @@ export default class MLService{
                     Authorization: `Bearer ${accessToken}`
                 }
             })
-            console.log("Nota enviada com sucesso")
+            Logger.info(`Nota do pedido ${orderId} enviada com sucesso`)
             await this.registrarHistoricoNota(orderId, true, "Nota enviada com sucesso")
-        }catch(e){
-            let motivoFalha = "Erro durante processamento da nota"
+        }catch(e: any){ 
+            let motivoFalha = `Erro durante processamento da nota`
             if(isAxiosError(e) && e.status === 400){
                 motivoFalha = obterMotivoFalhaEnvio(e)
-                console.log(motivoFalha)
+                Logger.error(`Erro no envio da nota do pedido ${orderId}: ${motivoFalha}`, e.message)
             }else if(e instanceof DatabaseError){
-                console.log("[Database error] ", e)
+                Logger.error(`Erro no envio da nota do pedido ${orderId}: ${e.originalError.message}`, e.originalError)
             }else{
-                console.log(e)
+                Logger.error(`Erro no envio da nota do pedido ${orderId}: ${e.message}`, e)
             }
 
             await this.registrarHistoricoNota(orderId, false, motivoFalha)
@@ -80,11 +99,7 @@ export default class MLService{
         try{
             await salvarHistoricoNota(orderId, enviado, motivoFalha)
         }catch(e){
-            if(e instanceof DatabaseError){
-                console.log("[Database error] ", e)
-            }else{
-                console.log(e)
-            }
+            Logger.error(`Erro ao salvar histórico da nota do pedido ${orderId}`, e)
         }
     }
 }

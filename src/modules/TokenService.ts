@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 import { obterVendedorPorId } from "./db/vendedor"
 import MLApi from "./mercado-livre/MLApi"
 import { globais } from "../globais"
+import { Logger } from "./Logger"
 
 interface Token{
     access_token: string
@@ -36,11 +37,11 @@ export default class TokenService{
                 TokenService.tokenCache[userId] = {access_token: data.access_token, expires_in: data.expires_in, created_at: Date.now()}
 
                 return TokenService.tokenCache[userId].access_token
-            }catch(e){
+            }catch(e: any){
                 if(isAxiosError(e)){
-                    console.error("Erro ao renovar token: ", e.status, " - ", e.response?.data.message)
+                    Logger.error(`Erro ao renovar token: ${e.status} - ${e.response?.data.message}` , e)
                 }else{
-                    console.error("Erro ao renovar token: ", e)
+                    Logger.error(`Erro ao renovar token: ${e?.message}`, e)
                 }
             }
     }

@@ -11,6 +11,7 @@ import { globais } from './globais';
 import TokenService from './modules/TokenService';
 import rotasML from './routes/rotasML';
 import MLService from './modules/mercado-livre/MLService';
+import { Logger } from './modules/Logger';
 
 const app = express()
 
@@ -19,7 +20,7 @@ app.use(express.json())
 
 app.use(rotasML)
 
-const mlService = new MLService()
+const mlService = new MLService() 
 
 const watcher = chokidar.watch(globais.CAMINHO_NFE, {ignored: (file) => !file.endsWith('xml')})
 watcher.on("add", async (path) => {
@@ -38,10 +39,10 @@ watcher.on("add", async (path) => {
   tunnel.url;
 
   tunnel.on("close", () => {
-    console.log("Tunel fechado")
+    Logger.info("Tunel fechado")
   });
 })()
 
 app.listen(3000, () => {
-    console.log("Servidor rodando na porta 3000")
+    Logger.info("Servidor rodando na porta 3000")
 })

@@ -2,6 +2,7 @@ import { Router, Request, Response } from "express";
 import MLService from "../modules/mercado-livre/MLService";
 import { globais } from "../globais";
 import { isAxiosError } from "axios";
+import { Logger } from "../modules/Logger";
 
 const rotasML = Router()
 const mlService = new MLService()
@@ -18,13 +19,13 @@ rotasML.get("/callback", async (req: Request, res: Response) => {
         const code = String(req.query.code)
         await mlService.callback(code)
         res.sendStatus(200)
-    }catch(e){
+    }catch(e: any){
         if(isAxiosError(e)){
-            console.log(e.status, " - ", e.response?.data.message)
+            Logger.error(`Erro no callback: ${e.status} - ${e.response?.data.message}`)
             res.sendStatus(Number(e.status))
             return
         }else{
-            console.log(e)
+            Logger.error(`Erro no callback: ${e.message}`, e)
         }
         res.sendStatus(500)
     }
@@ -39,7 +40,8 @@ rotasML.post("/notificacoes", async (req: Request, res: Response) => {
     try{
         await mlService.notificacao(userId, topic, resource)
         res.sendStatus(200)
-    }catch(e){
+    }catch(e: any){
+        Logger.error(`Erro ao receber notificação: topic ${topic} - resource ${resource}`, e)
         res.sendStatus(500)
     }
 
