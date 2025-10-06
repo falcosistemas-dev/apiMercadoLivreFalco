@@ -12,6 +12,7 @@ import TokenService from './modules/TokenService';
 import rotasML from './routes/rotasML';
 import MLService from './modules/mercado-livre/MLService';
 import { Logger } from './modules/Logger';
+import rotasPedido from './routes/rotasPedido';
 
 const app = express()
 
@@ -19,6 +20,7 @@ app.use(cors())
 app.use(express.json())
 
 app.use(rotasML)
+app.use(rotasPedido)
 
 const mlService = new MLService() 
 

@@ -1,4 +1,5 @@
 import { getPool } from "../../db"
+import { Logger } from "../Logger"
 import DatabaseError from "./DatabaseError"
 
 interface PedidoMercadoLivre {
@@ -14,11 +15,11 @@ export async function salvarPedidoMercadoLivre(userId: number, orderId: number, 
         await pool
             .request()
             .input("id_vendedor_mercadolivre_NM", userId)
-            .input("order_id_NM", null)
+            .input("order_id_NM", orderId)
             .input("shipment_id_NM", shipmentId ?? null)
             .execute("SalvarPedidoMercadoLivre")
     }catch(e){
-        console.log("Falha em SalvarPedidoMercadoLivre", e)
+        Logger.error("Falha em SalvarPedidoMercadoLivre", e)
     }
 }
 
@@ -39,4 +40,18 @@ export async function obterPedidoPorOrderId(orderId: number): Promise<PedidoMerc
         throw new DatabaseError("Falha em ObterPedidoPorOrderId", e)
     }
     
+}
+
+export async function atualizarEnvioPedido(orderId: number, notaEnviada: boolean, observacao: string){
+    const pool = await getPool()
+    try{
+        await pool
+            .request()
+            .input('order_id_NM', orderId)
+            .input('nota_enviada_BT', notaEnviada)
+            .input('observacao_VC', observacao)
+            .execute('AtualizarEnvioPedido')
+    }catch(e: any){
+        throw new DatabaseError("Falha em AtualizarEnvioPedido", e)
+    }
 }

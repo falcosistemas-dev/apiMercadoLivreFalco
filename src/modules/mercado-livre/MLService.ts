@@ -3,10 +3,9 @@ import { globais } from "../../globais";
 import MLApi from "./MLApi";
 import { salvarVendedorMercadoLivre } from "../db/vendedor";
 import TokenService from "../TokenService";
-import { obterPedidoPorOrderId, salvarPedidoMercadoLivre } from "../db/pedido";
+import { atualizarEnvioPedido, obterPedidoPorOrderId, salvarPedidoMercadoLivre } from "../db/pedido";
 import { isAxiosError } from "axios";
 import obterMotivoFalhaEnvio from "./obterErroEnvioNota";
-import { salvarHistoricoNota } from "../db/historico";
 import DatabaseError from "../db/DatabaseError";
 import { Logger } from "../Logger";
 
@@ -79,7 +78,7 @@ export default class MLService{
                 }
             })
             Logger.info(`Nota do pedido ${orderId} enviada com sucesso`)
-            await this.registrarHistoricoNota(orderId, true, "Nota enviada com sucesso")
+            await this.atualizarEnvio(orderId, true, "Nota enviada com sucesso")
         }catch(e: any){ 
             let motivoFalha = `Erro durante processamento da nota`
             if(isAxiosError(e) && e.status === 400){
@@ -91,15 +90,15 @@ export default class MLService{
                 Logger.error(`Erro no envio da nota do pedido ${orderId}: ${e.message}`, e)
             }
 
-            await this.registrarHistoricoNota(orderId, false, motivoFalha)
+            await this.atualizarEnvio(orderId, false, motivoFalha)
         }
     }
 
-    public async registrarHistoricoNota(orderId: number, enviado: boolean, motivoFalha: string | null){
+    public async atualizarEnvio(orderId: number, enviado: boolean, observacao: string){
         try{
-            await salvarHistoricoNota(orderId, enviado, motivoFalha)
+            await atualizarEnvioPedido(orderId, enviado, observacao)
         }catch(e){
-            Logger.error(`Erro ao salvar histórico da nota do pedido ${orderId}`, e)
+            Logger.error(`Erro ao atualizar nota do pedido ${orderId}`, e)
         }
     }
 }
