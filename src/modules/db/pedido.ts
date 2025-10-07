@@ -3,9 +3,12 @@ import { Logger } from "../Logger"
 import DatabaseError from "./DatabaseError"
 
 interface PedidoMercadoLivre {
-    order_id_NM: number,
-    id_vendedor_mercadolivre_NM: number,
-    shipment_id_NM: number | null | undefined,
+    order_id_NM: number
+    id_vendedor_mercadolivre_NM: number
+    shipment_id_NM: number | null
+    nota_enviada_BT: boolean | null
+    observacao_VC: string | null
+    data_envio_DT: string | null
 }
 
 export async function salvarPedidoMercadoLivre(userId: number, orderId: number, shipmentId?: number){
@@ -20,6 +23,21 @@ export async function salvarPedidoMercadoLivre(userId: number, orderId: number, 
             .execute("SalvarPedidoMercadoLivre")
     }catch(e){
         Logger.error("Falha em SalvarPedidoMercadoLivre", e)
+    }
+}
+
+export async function obterPedidos(){
+    const pool = await getPool()
+    try{
+        const result = await pool
+            .request()
+            .execute<PedidoMercadoLivre[]>('ObterPedidos')
+        
+            if (result.recordset.length > 0){
+                return result.recordset
+            }
+    }catch(e: any){
+        throw new DatabaseError("Falha em ObterPedidos", e)
     }
 }
 
@@ -41,6 +59,7 @@ export async function obterPedidoPorOrderId(orderId: number): Promise<PedidoMerc
     }
     
 }
+
 
 export async function atualizarEnvioPedido(orderId: number, notaEnviada: boolean, observacao: string){
     const pool = await getPool()

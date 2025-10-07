@@ -1,5 +1,4 @@
-CREATE PROCEDURE ObterPedidoPorOrderId
-    @order_id_NM NUMERIC
+CREATE PROCEDURE ObterPedidos
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -12,5 +11,4 @@ BEGIN
         observacao_VC,
         data_envio_DT
     FROM pedidos_mercadolivre_T
-    WHERE order_id_NM = @order_id_NM;
 END;
