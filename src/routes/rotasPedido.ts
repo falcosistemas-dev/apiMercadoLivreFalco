@@ -10,7 +10,7 @@ rotasPedido.get("/pedidos", async (req: Request, res: Response) => {
         const pedidos = await obterPedidos()
         res.status(200).json({pedidos})
     }catch(e: any){
-        Logger.error(`Erro ao obter pedidos: ${e.message}`, e)
+        Logger.error(`Erro ao obter pedidos: ${e.originalError.message || e.message}`, e)
         res.status(500).json({error: "Internal Server Error", message: "Erro ao obter pedido"})
     }
 })
@@ -27,7 +27,7 @@ rotasPedido.get("/pedidos/:id", async (req: Request, res: Response) => {
 
         res.status(200).json({pedido})
     }catch(e: any){
-        Logger.error(`Erro ao obter pedido por id: ${e.message}`, e)
+        Logger.error(`Erro ao obter pedido por id: ${e.originalError.message || e.message}`, e)
         res.status(500).json({error: "Internal server error", message: "Erro ao obter pedido"})
     }
 })
