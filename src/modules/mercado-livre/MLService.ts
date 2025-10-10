@@ -8,6 +8,7 @@ import { isAxiosError } from "axios";
 import obterMotivoFalhaEnvio from "./obterErroEnvioNota";
 import DatabaseError from "../db/DatabaseError";
 import { Logger } from "../Logger";
+import extrairInfoXml from "../xml";
 
 export default class MLService{
     public async callback(code: string){
@@ -66,6 +67,7 @@ export default class MLService{
     }
     
     public async enviarNota(orderId: number, content: any){
+        const nfeInfo = await extrairInfoXml(content)
         try{
             const pedido = await obterPedidoPorOrderId(orderId)
             const accessToken = await TokenService.obterToken(pedido?.id_vendedor_mercadolivre_NM as number)
@@ -78,7 +80,8 @@ export default class MLService{
                 }
             })
             Logger.info(`Nota do pedido ${orderId} enviada com sucesso`)
-            await this.atualizarEnvio(orderId, true, "Nota enviada com sucesso")
+            await this.atualizarEnvio(orderId, true, "Nota enviada com sucesso", nfeInfo.nNota, nfeInfo.nomeCliente)
+            return {success: true}
         }catch(e: any){ 
             let motivoFalha = `Erro durante processamento da nota`
             if(isAxiosError(e) && e.status === 400){
@@ -90,13 +93,14 @@ export default class MLService{
                 Logger.error(`Erro no envio da nota do pedido ${orderId}: ${e.message}`, e)
             }
 
-            await this.atualizarEnvio(orderId, false, motivoFalha)
+            await this.atualizarEnvio(orderId, false, motivoFalha, nfeInfo.nNota, nfeInfo.nomeCliente)
+            return {success: false}
         }
     }
 
-    public async atualizarEnvio(orderId: number, enviado: boolean, observacao: string){
+    public async atualizarEnvio(orderId: number, enviado: boolean, observacao: string, numeroNota: number | null, nomeCliente: string | null){
         try{
-            await atualizarEnvioPedido(orderId, enviado, observacao)
+            await atualizarEnvioPedido(orderId, enviado, observacao, numeroNota, nomeCliente)
         }catch(e){
             Logger.error(`Erro ao atualizar nota do pedido ${orderId}`, e)
         }

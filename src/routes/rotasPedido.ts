@@ -6,8 +6,16 @@ const rotasPedido = Router()
 
 
 rotasPedido.get("/pedidos", async (req: Request, res: Response) => {
+    const enviadoQuery = String(req.query.enviado).toLowerCase()
+    let enviado: boolean | undefined
+    if(["true", "yes", "y", "1"].includes(enviadoQuery)){
+        enviado = true
+    }else if(["false", "no", "n", "0"].includes(enviadoQuery)){
+        enviado = false
+    }
+
     try{
-        const pedidos = await obterPedidos()
+        const pedidos = await obterPedidos({enviado})
         res.status(200).json({pedidos})
     }catch(e: any){
         Logger.error(`Erro ao obter pedidos: ${e.originalError.message || e.message}`, e)

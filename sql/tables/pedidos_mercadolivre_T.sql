@@ -4,5 +4,7 @@ CREATE TABLE pedidos_mercadolivre_T(
     id_vendedor_mercadolivre_NM NUMERIC NOT NULL,
     nota_enviada_BT BOOLEAN NULL,
     observacao_VC VARCHAR(255) NULL,
-    data_envio_DT DATETIME NULL
+    data_envio_DT DATETIME NULL,
+    numero_nota_NM NUMERIC NULL,
+    nome_cliente_VC VARCHAR(255) NULL
 )

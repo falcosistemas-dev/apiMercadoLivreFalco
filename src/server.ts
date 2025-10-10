@@ -13,6 +13,9 @@ import rotasML from './routes/rotasML';
 import MLService from './modules/mercado-livre/MLService';
 import { Logger } from './modules/Logger';
 import rotasPedido from './routes/rotasPedido';
+import { Parser } from 'xml2js';
+import moverArquivo from './modules/moverArquivo';
+import path from 'path';
 
 const app = express()
 
@@ -25,12 +28,16 @@ app.use(rotasPedido)
 const mlService = new MLService() 
 
 const watcher = chokidar.watch(globais.CAMINHO_NFE, {ignored: (file) => !file.endsWith('xml')})
-watcher.on("add", async (path) => {
-    if(path.match(/\d+/)){
-        const orderId = parseInt(path.replace(/\D/g, ""))
-        const content = await readFile(path, 'utf-8')
+watcher.on("add", async (filepath) => {
+    if(filepath.match(/\d+/)){
+        const orderId = parseInt(filepath.replace(/\D/g, ""))
+        const content = await readFile(filepath, 'utf-8')
 
-        await mlService.enviarNota(orderId, content)
+        const {success} = await mlService.enviarNota(orderId, content)
+        if(success){
+          const filename = String(filepath.split("/").at(0))
+          await moverArquivo(filepath, path.join(globais.CAMINHO_NFE, "enviado", filename))
+        }
     }
 
 });

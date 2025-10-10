@@ -26,11 +26,16 @@ export async function salvarPedidoMercadoLivre(userId: number, orderId: number, 
     }
 }
 
-export async function obterPedidos(){
+interface PedidosFiltros{
+    enviado?: boolean
+}
+
+export async function obterPedidos(filtros?: PedidosFiltros){
     const pool = await getPool()
     try{
         const result = await pool
             .request()
+            .input("nota_enviada_BT", filtros?.enviado)
             .execute<PedidoMercadoLivre[]>('ObterPedidos')
         
             if (result.recordset.length > 0){
@@ -61,7 +66,7 @@ export async function obterPedidoPorOrderId(orderId: number): Promise<PedidoMerc
 }
 
 
-export async function atualizarEnvioPedido(orderId: number, notaEnviada: boolean, observacao: string){
+export async function atualizarEnvioPedido(orderId: number, notaEnviada: boolean, observacao: string, numeroNota: number | null, nomeCliente: string | null){
     const pool = await getPool()
     try{
         await pool
@@ -69,6 +74,8 @@ export async function atualizarEnvioPedido(orderId: number, notaEnviada: boolean
             .input('order_id_NM', orderId)
             .input('nota_enviada_BT', notaEnviada)
             .input('observacao_VC', observacao)
+            .input("numero_nota_NM", numeroNota)
+            .input("nome_cliente_VC", nomeCliente)
             .execute('AtualizarEnvioPedido')
     }catch(e: any){
         throw new DatabaseError("Falha em AtualizarEnvioPedido", e)
