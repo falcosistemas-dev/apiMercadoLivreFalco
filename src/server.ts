@@ -35,8 +35,7 @@ watcher.on("add", async (filepath) => {
 
         const {success} = await mlService.enviarNota(orderId, content)
         if(success){
-          const filename = String(filepath.split("/").at(0))
-          await moverArquivo(filepath, path.join(globais.CAMINHO_NFE, "enviado", filename))
+          await moverArquivo(filepath, path.join(globais.CAMINHO_NFE, "enviado", orderId + ".xml"))
         }
     }
 
