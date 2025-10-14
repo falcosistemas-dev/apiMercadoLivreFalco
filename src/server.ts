@@ -6,7 +6,7 @@ import { isAxiosError } from 'axios';
 import chokidar from 'chokidar'
 import localtunnel from 'localtunnel';
 import MLApi from './modules/mercado-livre/MLApi';
-import { obterPedidoPorOrderId } from './modules/db/pedido';
+import { obterPedidoPorOrderId, obterPedidos } from './modules/db/pedido';
 import { globais } from './globais';
 import TokenService from './modules/TokenService';
 import rotasML from './routes/rotasML';
@@ -24,6 +24,9 @@ app.use(express.json())
 
 app.use(rotasML)
 app.use(rotasPedido)
+
+app.set('view engine', 'ejs')
+app.set('views', './views')
 
 const mlService = new MLService() 
 

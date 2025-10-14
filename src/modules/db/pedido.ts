@@ -3,12 +3,15 @@ import { Logger } from "../Logger"
 import DatabaseError from "./DatabaseError"
 
 interface PedidoMercadoLivre {
+    id: number
     order_id_NM: number
     id_vendedor_mercadolivre_NM: number
     shipment_id_NM: number | null
     nota_enviada_BT: boolean | null
     observacao_VC: string | null
     data_envio_DT: string | null
+    numero_nota_NM: string | null
+    nome_cliente_VC: string | null
 }
 
 export async function salvarPedidoMercadoLivre(userId: number, orderId: number, shipmentId?: number){
