@@ -1,5 +1,6 @@
 CREATE TABLE pedidos_mercadolivre_T(
-    order_id_NM NUMERIC PRIMARY KEY NOT NULL,
+    id_NM INT IDENTITY(1,1) PRIMARY KEY,
+    order_id_NM NUMERIC NOT NULL,
     shipment_id_NM NUMERIC NULL,
     id_vendedor_mercadolivre_NM NUMERIC NOT NULL,
     nota_enviada_BT BOOLEAN NULL,

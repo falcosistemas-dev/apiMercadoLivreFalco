@@ -6,7 +6,8 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    SELECT 
+    SELECT
+        id_NM,
         order_id_NM,
         id_vendedor_mercadolivre_NM,
         shipment_id_NM,
@@ -18,6 +19,5 @@ BEGIN
     FROM pedidos_mercadolivre_T
     WHERE 
         (@nota_enviada_BT IS NULL OR nota_enviada_BT = @nota_enviada_BT) AND
-        ((@data_envio_de_DT IS NULL OR @data_envio_ate_DT IS NULL) OR (data_envio_DT BETWEEN @data_envio_de_DT AND @data_envio_ate_DT))
-        ;
+        ((@data_envio_de_DT IS NULL OR @data_envio_ate_DT IS NULL) OR (data_envio_DT BETWEEN @data_envio_de_DT AND @data_envio_ate_DT));
 END;

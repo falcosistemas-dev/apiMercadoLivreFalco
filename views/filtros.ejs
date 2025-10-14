@@ -1,4 +1,22 @@
-<div class="flex items-center justify-center gap-2 mx-auto w-10/12">
+<div class="flex items-center justify-center gap-2 mx-auto mb-4 w-10/12">
+    <form class="flex items-center justify-between w-full" onsubmit="reloadWithParams">
+    <div>
+        <label for="cliente" class="text-lg">Cliente</label>
+        <input type="text" name="cliente" id="cliente" class="border rounded-md p-2">
+    </div>
+    <div>
+        <input type="radio" name="enviado" id="todos" checked>
+        <label for="todos" class="text-lg">Todos</label>
+    </div>
+    <div>
+        <input type="radio" name="enviado" id="sucesso" value="true">
+        <label for="sucesso" class="text-lg">Enviados com sucesso</label>
+    </div>
+    <div>
+        <input type="radio" name="enviado" id="falhou" value="false">
+        <label for="falhou" class="text-lg">Não enviados</label>
+    </div>
+        
     <button
     class="border-slate-700 border text-slate-700 font-medium p-2 rounded-md my-4 hover:cursor-pointer"
     onclick="window.location.href = window.location.pathname"
@@ -7,8 +25,26 @@
     </button>
     <button
     class="bg-slate-700 text-white p-2 rounded-md my-4 hover:cursor-pointer font-medium"
-    onclick="window.location.reload()"
+    type="submit"
     >
-        Atualizar
+        Filtrar
     </button>
+    </form>
 </div>
+
+<script>
+    function recarregarComFiltro(e){
+        e.preventDefault()
+        const formData = new FormData(e.currentTarget)
+
+        const novaUrl = new URL(window.location)
+        for (let filtroNome of ['cliente', 'enviado']){
+            const filtro = formData.get(filtroNome)
+            if (filtro){
+                novaUrl.searchParams.append(filtroNome, filtro)
+            }
+        }
+
+        window.location.replace(novaUrl)
+    }
+</script>

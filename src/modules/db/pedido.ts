@@ -69,6 +69,26 @@ export async function obterPedidoPorOrderId(orderId: number): Promise<PedidoMerc
 }
 
 
+export async function obterPedidoPorId(id: number): Promise<PedidoMercadoLivre | null>{
+    const pool = await getPool()
+    try{
+        const result = await pool
+            .request()
+            .input("id_NM", id)
+            .execute<PedidoMercadoLivre>("ObterPedidoPorId")
+        
+        if (result.recordset.length > 0){
+            return result.recordset[0]
+        }
+
+        return null
+    }catch(e: any){
+        throw new DatabaseError("Falha em ObterPedidoPorId", e)
+    }
+    
+}
+
+
 export async function atualizarEnvioPedido(orderId: number, notaEnviada: boolean, observacao: string, numeroNota: number | null, nomeCliente: string | null){
     const pool = await getPool()
     try{
