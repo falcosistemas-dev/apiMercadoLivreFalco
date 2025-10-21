@@ -2,7 +2,7 @@
 
 <div class="w-full text-center">
     <h1 class="text-4xl text-center my-10">Relatório de envio NFe Mercado Livre</h1>
-    <%- include('filtros') %>
+    <%- include('filtros', {query}) %>
     <% if (!!pedidos) { %>
         <div class="text-center w-10/12 mx-auto divide-y divide-slate-300 border border-slate-300 rounded-lg">
             <div class="grid [grid-template-columns:0.25fr_0.375fr_0.75fr_2.25fr_1fr_0.5fr_2fr] items-center bg-slate-400 rounded-t-lg divide-x divide-slate-200">

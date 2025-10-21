@@ -51,7 +51,7 @@ rotasPedido.get("/", async (req: Request, res: Response) => {
             nota_enviada_BT: p.nota_enviada_BT === null ? "" : !!p.nota_enviada_BT ? "Sim" : "Não"
         }
         })
-        res.render('home', {pedidos: novosPedidos});
+        res.render('home', {pedidos: novosPedidos, query: req.query});
     }catch(e: any){
         Logger.error(`Erro ao obter pedidos: ${e.originalError?.message || e.message || e}`, e)
         res.status(500).json({error: "Internal Server Error", message: "Erro ao obter pedido"})
