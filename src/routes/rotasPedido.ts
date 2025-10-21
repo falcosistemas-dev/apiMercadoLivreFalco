@@ -33,8 +33,18 @@ rotasPedido.get("/", async (req: Request, res: Response) => {
         enviado = false
     }
 
+    let dataInicio: Date | undefined = undefined
+    let dataFinal: Date | undefined = undefined
+    if(req.query.dataInicio){
+        dataInicio = new Date(String(req.query.dataInicio))
+    }
+
+    if(req.query.dataFinal){
+        dataFinal = new Date(String(req.query.dataFinal))
+    }
+
     try{
-        const pedidos = await obterPedidos({enviado})
+        const pedidos = await obterPedidos({enviado, dataInicio, dataFinal})
         const novosPedidos = pedidos?.map(p => {return {
             ...p,
             data_envio_DT: formatarData(p.data_envio_DT),

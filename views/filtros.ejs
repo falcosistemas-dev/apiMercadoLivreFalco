@@ -1,20 +1,32 @@
 <div class="flex items-center justify-center gap-2 mx-auto mb-4 w-10/12">
     <form class="flex items-center justify-between w-full" onsubmit="reloadWithParams">
-    <div>
-        <label for="cliente" class="text-lg">Cliente</label>
-        <input type="text" name="cliente" id="cliente" class="border rounded-md p-2">
+    <div class="flex gap-4 items-center">
+        <div>
+            <label for="cliente" class="text-lg">Cliente</label>
+            <input type="text" name="cliente" id="cliente" class="border rounded-md p-2">
+        </div>
+        <div>
+            <input type="radio" name="enviado" id="todos" checked>
+            <label for="todos" class="text-lg">Todos</label>
+        </div>
+        <div>
+            <input type="radio" name="enviado" id="sucesso" value="true">
+            <label for="sucesso" class="text-lg">Enviados com sucesso</label>
+        </div>
+        <div>
+            <input type="radio" name="enviado" id="falhou" value="false">
+            <label for="falhou" class="text-lg">Não enviados</label>
+        </div>
     </div>
-    <div>
-        <input type="radio" name="enviado" id="todos" checked>
-        <label for="todos" class="text-lg">Todos</label>
-    </div>
-    <div>
-        <input type="radio" name="enviado" id="sucesso" value="true">
-        <label for="sucesso" class="text-lg">Enviados com sucesso</label>
-    </div>
-    <div>
-        <input type="radio" name="enviado" id="falhou" value="false">
-        <label for="falhou" class="text-lg">Não enviados</label>
+    <div class="flex flex-col gap-2">
+        <div>
+            <label for="dataInicio">De: </label>
+            <input type="date" name="dataInicio">
+        </div>
+        <div>
+            <label for="dataFinal">Até: </label>
+            <input type="date" name="dataFinal">
+        </div>
     </div>
         
     <button
@@ -38,7 +50,7 @@
         const formData = new FormData(e.currentTarget)
 
         const novaUrl = new URL(window.location)
-        for (let filtroNome of ['cliente', 'enviado']){
+        for (let filtroNome of ['cliente', 'enviado', 'dataInicio', 'dataFinal']){
             const filtro = formData.get(filtroNome)
             if (filtro){
                 novaUrl.searchParams.append(filtroNome, filtro)
