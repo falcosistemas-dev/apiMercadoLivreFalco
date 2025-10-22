@@ -26,7 +26,7 @@ app.use(rotasML)
 app.use(rotasPedido)
 
 app.set('view engine', 'ejs')
-app.set('views', './views')
+app.set('views', path.join(__dirname, 'views'))
 
 const mlService = new MLService() 
 
