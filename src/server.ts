@@ -1,21 +1,16 @@
-import express, { Request, Response } from 'express'
+import express from 'express'
 import cors from 'cors'
-import dotenv from 'dotenv'
 import { readFile } from 'fs/promises';
-import { isAxiosError } from 'axios';
 import chokidar from 'chokidar'
 import localtunnel from 'localtunnel';
-import MLApi from './modules/mercado-livre/MLApi';
-import { obterPedidoPorOrderId, obterPedidos } from './modules/db/pedido';
 import { globais } from './globais';
-import TokenService from './modules/TokenService';
 import rotasML from './routes/rotasML';
 import MLService from './modules/mercado-livre/MLService';
 import { Logger } from './modules/Logger';
 import rotasPedido from './routes/rotasPedido';
-import { Parser } from 'xml2js';
 import moverArquivo from './modules/moverArquivo';
 import path from 'path';
+import rotasInterface from './routes/rotasInterface';
 
 const app = express()
 
@@ -24,6 +19,7 @@ app.use(express.json())
 
 app.use(rotasML)
 app.use(rotasPedido)
+app.use(rotasInterface)
 
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
