@@ -1,4 +1,4 @@
-<div class="flex items-center justify-center gap-2 mx-auto mb-4 w-10/12">
+<div class="flex flex-col items-center justify-center gap-2 mx-auto mb-4 w-10/12">
     <form class="flex items-center justify-between w-full" onsubmit="recarregarComFiltro">
     <div class="flex gap-4 items-center">
         <div>
@@ -25,7 +25,7 @@
         </div>
     </div>
     <div class="space-x-4">
-        <a href="http://localhost:3000" class="bg-slate-100 border p-2 rounded-lg">Limpar</a>
+        <a href="/" class="bg-slate-100 border p-2 rounded-lg">Limpar</a>
         
         <button
         class="bg-slate-700 text-white p-2 rounded-md my-4 hover:cursor-pointer font-medium"
@@ -35,7 +35,7 @@
         </button>
     </div>
 </form>
-
+<a href="<%= '/export' + queryString %>" target="_blank" class="bg-slate-300 p-4 rounded-lg">Exportar dados</a>
 </div>
 
 <script>
