@@ -2,15 +2,15 @@
     <form class="flex items-center justify-between w-full" onsubmit="recarregarComFiltro">
     <div class="flex gap-4 items-center">
         <div>
-            <input type="radio" name="enviado" id="todos" value="" <%= query.enviado === '' || !query.enviado ? 'checked' : false %> >
+            <input type="radio" style="background-color: #fee708;" name="enviado" id="todos" value="" <%= query.enviado === '' || !query.enviado ? 'checked' : false %> >
             <label for="todos" class="text-lg">Todos</label>
         </div>
         <div>
-            <input type="radio" name="enviado" id="sucesso" value="true" <%= query.enviado === 'true' ? 'checked' : false %> >
+            <input type="radio" class="checked:bg-[#fee708] checked:text-[#fee708]" name="enviado" id="sucesso" value="true" <%= query.enviado === 'true' ? 'checked' : false %> >
             <label for="sucesso" class="text-lg">Enviados com sucesso</label>
         </div>
         <div>
-            <input type="radio" name="enviado" id="falhou" value="false" <%= query.enviado === 'false' ? 'checked' : false %> >
+            <input type="radio" class="checked:bg-[#fee708] checked:text-[#fee708]" name="enviado" id="falhou" value="false" <%= query.enviado === 'false' ? 'checked' : false %> >
             <label for="falhou" class="text-lg">Não enviados</label>
         </div>
     </div>
@@ -25,17 +25,17 @@
         </div>
     </div>
     <div class="space-x-4">
-        <a href="/" class="bg-slate-100 border p-2 rounded-lg">Limpar</a>
+        <a href="/" class="bg-[#fee708] text-black font-medium p-2 rounded-lg">Limpar</a>
         
         <button
-        class="bg-slate-700 text-white p-2 rounded-md my-4 hover:cursor-pointer font-medium"
+        class="bg-[#fee708] text-black p-2 rounded-md my-4 hover:cursor-pointer font-medium"
         type="submit"
         >
             Filtrar
         </button>
     </div>
 </form>
-<a href="<%= '/export' + queryString %>" target="_blank" class="bg-slate-300 p-4 rounded-lg">Exportar dados</a>
+<a href="<%= '/export' + queryString %>" target="_blank" class="bg-[#fee708] text-black font-medium p-4 rounded-lg">Exportar dados</a>
 </div>
 
 <script>

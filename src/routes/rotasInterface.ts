@@ -77,8 +77,8 @@ rotasInterface.get('/export', async (req: Request, res: Response) => {
 
         worksheet.columns = [
             {header: 'id', key: 'id_NM'},
-            {header: 'N Nota', key: 'numero_nota_NM', width: 10},
-            {header: 'N do pedido ML', key: 'order_id_NM', width: 25 },
+            {header: 'Nº Nota', key: 'numero_nota_NM', width: 10},
+            {header: 'Nº do pedido ML', key: 'order_id_NM', width: 25 },
             {header: 'Cliente', key: 'nome_cliente_VC', width: 50},
             {header: 'Data/Hora do envio', key: 'data_envio_DT', width: 15},
             {header: 'Enviado', key: 'nota_enviada_BT'},
