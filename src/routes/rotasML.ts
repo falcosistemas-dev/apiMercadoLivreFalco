@@ -33,7 +33,7 @@ rotasML.get("/callback", async (req: Request, res: Response) => {
 
 // Rota que recebe notificação quando um novo pedido/envio é criado
 rotasML.post("/notificacoes", async (req: Request, res: Response) => {
-    const userId = parseInt(req.body.user_id)
+    const userId = Number.parseInt(req.body.user_id)
     const topic = String(req.body.topic)
     const resource = String(req.body.resource)
 

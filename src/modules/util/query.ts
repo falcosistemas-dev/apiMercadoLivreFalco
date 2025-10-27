@@ -1,7 +1,7 @@
 export function queryNumber(param: string): number | undefined{
     param = param.trim()
     if (param !== '' && /^[0-9]+$/.test(param)){
-        return parseInt(param)
+        return Number.parseInt(param)
     }
 }
 

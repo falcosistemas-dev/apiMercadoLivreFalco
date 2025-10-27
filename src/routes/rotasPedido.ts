@@ -1,7 +1,6 @@
 import { Request, Response, Router } from "express";
 import { obterPedidoPorOrderId, obterPedidos } from "../modules/db/pedido";
 import { Logger } from "../modules/Logger";
-import { formatarData } from "../modules/formatters";
 
 const rotasPedido = Router()
 
@@ -25,7 +24,7 @@ rotasPedido.get("/pedidos", async (req: Request, res: Response) => {
 })
 
 rotasPedido.get("/pedidos/:id", async (req: Request, res: Response) => {
-    const id = parseInt(req.params.id)
+    const id = Number.parseInt(req.params.id)
     try{
         const pedido = await obterPedidoPorOrderId(id)
         if(!pedido){

@@ -44,7 +44,7 @@ export default class MLService{
 
     public async notificacao(userId: number, topic: string, resource: string){
         if(topic === "orders_v2"){
-            const orderId = parseInt(resource.split("/")[2])
+            const orderId = Number.parseInt(resource.split("/")[2])
 
             try{
                 let accessToken = await TokenService.obterToken(userId)

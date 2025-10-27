@@ -1,4 +1,4 @@
-import fs from 'fs/promises'
+import fs from 'node:fs/promises'
 import { Logger } from './Logger'
 
 export default async function moverArquivo(origem: string, destino: string){

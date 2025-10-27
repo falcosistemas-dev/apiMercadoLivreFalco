@@ -1,6 +1,6 @@
 import express from 'express'
 import cors from 'cors'
-import { readFile } from 'fs/promises';
+import { readFile } from 'node:fs/promises';
 import chokidar from 'chokidar'
 import localtunnel from 'localtunnel';
 import { globais } from './globais';
@@ -9,7 +9,7 @@ import MLService from './modules/mercado-livre/MLService';
 import { Logger } from './modules/Logger';
 import rotasPedido from './routes/rotasPedido';
 import moverArquivo from './modules/moverArquivo';
-import path from 'path';
+import path from 'node:path';
 import rotasInterface from './routes/rotasInterface';
 
 const app = express()
@@ -32,7 +32,7 @@ const mlService = new MLService()
 const watcher = chokidar.watch(globais.CAMINHO_NFE, {ignored: (file) => !file.endsWith('xml')})
 watcher.on("add", async (filepath) => {
     if(filepath.match(/\d+/)){
-        const orderId = parseInt(filepath.replace(/\D/g, ""))
+        const orderId = Number.parseInt(filepath.replace(/\D/g, ""))
         const content = await readFile(filepath, 'utf-8')
 
         const {success} = await mlService.enviarNota(orderId, content)
