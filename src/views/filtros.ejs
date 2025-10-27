@@ -1,8 +1,12 @@
 <div class="flex flex-col items-center justify-center gap-2 mx-auto mb-4 w-10/12">
     <form class="flex items-center justify-between w-full" onsubmit="recarregarComFiltro">
         <div class="flex flex-col gap-2 justify-start">
-            <label for="numeroNota" class="text-start">Número da nota</label>
+            <label for="numeroNota" class="text-start">Nº da nota</label>
             <input class="border p-2 rounded" type="text" id="numeroNota" name="numeroNota" value="<%= query.numeroNota %>">
+        </div>
+        <div class="flex flex-col gap-2 justify-start">
+            <label for="orderId" class="text-start">Nº do pedido do Mercado Livre </label>
+            <input class="border p-2 rounded" type="text" id="numeroNota" name="orderId" value="<%= query.orderId %>">
         </div>
         <div class="flex gap-4 items-center">
             <div>
@@ -53,7 +57,7 @@
         const formData = new FormData(e.currentTarget)
 
         const novaUrl = new URL(window.location)
-        for (let filtroNome of ['cliente', 'enviado', 'dataInicio', 'dataFinal', 'numeroNota']){
+        for (let filtroNome of ['cliente', 'enviado', 'dataInicio', 'dataFinal', 'numeroNota', 'orderId']){
             const filtro = formData.get(filtroNome)
             if (filtro){
                 novaUrl.searchParams.append(filtroNome, filtro)

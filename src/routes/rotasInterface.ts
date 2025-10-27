@@ -9,6 +9,8 @@ const rotasInterface = Router()
 rotasInterface.get("/", async (req: Request, res: Response) => {
     const enviadoQuery = String(req.query.enviado).toLowerCase()
     const numeroNotaQuery = String(req.query.numeroNota).trim()
+    const orderIdQuery = String(req.query.orderId).trim()
+
     let enviado: boolean | undefined
     if(["true", "yes", "y", "1"].includes(enviadoQuery)){
         enviado = true
@@ -19,6 +21,11 @@ rotasInterface.get("/", async (req: Request, res: Response) => {
     let numeroNota: number | undefined
     if(numeroNotaQuery !== '' && /^[a-zA-Z0-9]+$/.test(numeroNotaQuery)){
         numeroNota = parseInt(numeroNotaQuery)
+    }
+
+    let orderId: number | undefined
+    if(orderIdQuery !== '' && /^[a-zA-Z0-9]+$/.test(orderIdQuery)){
+        orderId = parseInt(orderIdQuery)
     }
 
     let dataInicio: Date | undefined = undefined
@@ -32,7 +39,7 @@ rotasInterface.get("/", async (req: Request, res: Response) => {
     }
 
     try{
-        const pedidos = await obterPedidos({enviado, dataInicio, dataFinal, numeroNota})
+        const pedidos = await obterPedidos({enviado, dataInicio, dataFinal, numeroNota, orderId})
         const novosPedidos = pedidos?.map(p => {return {
             ...p,
             data_envio_DT: formatarData(p.data_envio_DT),
@@ -54,6 +61,8 @@ rotasInterface.get("/", async (req: Request, res: Response) => {
 rotasInterface.get('/export', async (req: Request, res: Response) => {
     const enviadoQuery = String(req.query.enviado).toLowerCase()
     const numeroNotaQuery = String(req.query.numeroNota).trim()
+    const orderIdQuery = String(req.query.orderId).trim()
+
     let enviado: boolean | undefined
     if(["true", "yes", "y", "1"].includes(enviadoQuery)){
         enviado = true
@@ -64,6 +73,11 @@ rotasInterface.get('/export', async (req: Request, res: Response) => {
     let numeroNota: number | undefined
     if(numeroNotaQuery !== ''){
         numeroNota = parseInt(numeroNotaQuery)
+    }
+
+    let orderId: number | undefined
+    if(orderIdQuery !== '' && /^[a-zA-Z0-9]+$/.test(orderIdQuery)){
+        orderId = parseInt(orderIdQuery)
     }
 
     let dataInicio: Date | undefined = undefined
@@ -77,7 +91,7 @@ rotasInterface.get('/export', async (req: Request, res: Response) => {
     }
 
     try{
-        const pedidos = await obterPedidos({enviado, dataInicio, dataFinal, numeroNota})
+        const pedidos = await obterPedidos({enviado, dataInicio, dataFinal, numeroNota, orderId})
         const novosPedidos = pedidos?.map(p => {return {
             ...p,
             nota_enviada_BT: p.nota_enviada_BT === null ? "" : !!p.nota_enviada_BT ? "Sim" : "Não"
