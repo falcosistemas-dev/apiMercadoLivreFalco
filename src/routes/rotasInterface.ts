@@ -64,7 +64,11 @@ rotasInterface.get('/export', async (req: Request, res: Response) => {
             {header: 'Observação', key: 'observacao_VC', width: 80 }
         ]
 
-        novosPedidos?.forEach(p => worksheet.addRow({...p, order_id_NM: p.order_id_NM.toString()}))
+        if(novosPedidos){
+            for (let ped of novosPedidos){
+                worksheet.addRow({...ped, order_id_NM: ped.order_id_NM.toString()})
+            }
+        }
 
         const filename = 'Relatório de NFe.xlsx'
 

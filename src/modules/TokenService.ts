@@ -1,5 +1,4 @@
-import axios, { isAxiosError } from "axios"
-import dotenv from 'dotenv'
+import { isAxiosError } from "axios"
 import { obterVendedorPorId } from "./db/vendedor"
 import MLApi from "./mercado-livre/MLApi"
 import { globais } from "../globais"

@@ -1,4 +1,3 @@
-import { Request, Response } from "express";
 import { globais } from "../../globais";
 import MLApi from "./MLApi";
 import { salvarVendedorMercadoLivre } from "../db/vendedor";
