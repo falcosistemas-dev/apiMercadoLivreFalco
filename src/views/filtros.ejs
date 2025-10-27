@@ -1,40 +1,44 @@
 <div class="flex flex-col items-center justify-center gap-2 mx-auto mb-4 w-10/12">
     <form class="flex items-center justify-between w-full" onsubmit="recarregarComFiltro">
-    <div class="flex gap-4 items-center">
-        <div>
-            <input type="radio" style="background-color: #fee708;" name="enviado" id="todos" value="" <%= query.enviado === '' || !query.enviado ? 'checked' : false %> >
-            <label for="todos" class="text-lg">Todos</label>
+        <div class="flex flex-col gap-2 justify-start">
+            <label for="numeroNota" class="text-start">Número da nota</label>
+            <input class="border p-2 rounded" type="text" id="numeroNota" name="numeroNota" value="<%= query.numeroNota %>">
         </div>
-        <div>
-            <input type="radio" class="checked:bg-[#fee708] checked:text-[#fee708]" name="enviado" id="sucesso" value="true" <%= query.enviado === 'true' ? 'checked' : false %> >
-            <label for="sucesso" class="text-lg">Enviados com sucesso</label>
+        <div class="flex gap-4 items-center">
+            <div>
+                <input type="radio" style="background-color: #fee708;" name="enviado" id="todos" value="" <%= query.enviado === '' || !query.enviado ? 'checked' : false %> >
+                <label for="todos" class="text-lg">Todos</label>
+            </div>
+            <div>
+                <input type="radio" class="checked:bg-[#fee708] checked:text-[#fee708]" name="enviado" id="sucesso" value="true" <%= query.enviado === 'true' ? 'checked' : false %> >
+                <label for="sucesso" class="text-lg">Enviados com sucesso</label>
+            </div>
+            <div>
+                <input type="radio" class="checked:bg-[#fee708] checked:text-[#fee708]" name="enviado" id="falhou" value="false" <%= query.enviado === 'false' ? 'checked' : false %> >
+                <label for="falhou" class="text-lg">Não enviados</label>
+            </div>
         </div>
-        <div>
-            <input type="radio" class="checked:bg-[#fee708] checked:text-[#fee708]" name="enviado" id="falhou" value="false" <%= query.enviado === 'false' ? 'checked' : false %> >
-            <label for="falhou" class="text-lg">Não enviados</label>
+        <div class="flex flex-col gap-2">
+            <div>
+                <label for="dataInicio">De: </label>
+                <input type="date" name="dataInicio" value="<%= query.dataInicio %>" >
+            </div>
+            <div>
+                <label for="dataFinal">Até: </label>
+                <input type="date" name="dataFinal" value="<%= query.dataFinal %>">
+            </div>
         </div>
-    </div>
-    <div class="flex flex-col gap-2">
-        <div>
-            <label for="dataInicio">De: </label>
-            <input type="date" name="dataInicio" value="<%= query.dataInicio %>" >
+        <div class="space-x-4">
+            <a href="/" class="bg-[#fee708] text-black font-medium p-2 rounded-lg">Limpar</a>
+            
+            <button
+            class="bg-[#fee708] text-black p-2 rounded-md my-4 hover:cursor-pointer font-medium"
+            type="submit"
+            >
+                Filtrar
+            </button>
         </div>
-        <div>
-            <label for="dataFinal">Até: </label>
-            <input type="date" name="dataFinal" value="<%= query.dataFinal %>">
-        </div>
-    </div>
-    <div class="space-x-4">
-        <a href="/" class="bg-[#fee708] text-black font-medium p-2 rounded-lg">Limpar</a>
-        
-        <button
-        class="bg-[#fee708] text-black p-2 rounded-md my-4 hover:cursor-pointer font-medium"
-        type="submit"
-        >
-            Filtrar
-        </button>
-    </div>
-</form>
+    </form>
 <a href="<%= '/export' + queryString %>" target="_blank" class="bg-[#fee708] text-black font-medium p-4 rounded-lg">Exportar dados</a>
 </div>
 
@@ -49,7 +53,7 @@
         const formData = new FormData(e.currentTarget)
 
         const novaUrl = new URL(window.location)
-        for (let filtroNome of ['cliente', 'enviado', 'dataInicio', 'dataFinal']){
+        for (let filtroNome of ['cliente', 'enviado', 'dataInicio', 'dataFinal', 'numeroNota']){
             const filtro = formData.get(filtroNome)
             if (filtro){
                 novaUrl.searchParams.append(filtroNome, filtro)

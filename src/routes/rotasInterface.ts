@@ -8,11 +8,17 @@ const rotasInterface = Router()
 
 rotasInterface.get("/", async (req: Request, res: Response) => {
     const enviadoQuery = String(req.query.enviado).toLowerCase()
+    const numeroNotaQuery = String(req.query.numeroNota).trim()
     let enviado: boolean | undefined
     if(["true", "yes", "y", "1"].includes(enviadoQuery)){
         enviado = true
     }else if(["false", "no", "n", "0"].includes(enviadoQuery)){
         enviado = false
+    }
+
+    let numeroNota: number | undefined
+    if(numeroNotaQuery !== '' && /^[a-zA-Z0-9]+$/.test(numeroNotaQuery)){
+        numeroNota = parseInt(numeroNotaQuery)
     }
 
     let dataInicio: Date | undefined = undefined
@@ -26,7 +32,7 @@ rotasInterface.get("/", async (req: Request, res: Response) => {
     }
 
     try{
-        const pedidos = await obterPedidos({enviado, dataInicio, dataFinal})
+        const pedidos = await obterPedidos({enviado, dataInicio, dataFinal, numeroNota})
         const novosPedidos = pedidos?.map(p => {return {
             ...p,
             data_envio_DT: formatarData(p.data_envio_DT),
@@ -47,11 +53,17 @@ rotasInterface.get("/", async (req: Request, res: Response) => {
 
 rotasInterface.get('/export', async (req: Request, res: Response) => {
     const enviadoQuery = String(req.query.enviado).toLowerCase()
+    const numeroNotaQuery = String(req.query.numeroNota).trim()
     let enviado: boolean | undefined
     if(["true", "yes", "y", "1"].includes(enviadoQuery)){
         enviado = true
     }else if(["false", "no", "n", "0"].includes(enviadoQuery)){
         enviado = false
+    }
+
+    let numeroNota: number | undefined
+    if(numeroNotaQuery !== ''){
+        numeroNota = parseInt(numeroNotaQuery)
     }
 
     let dataInicio: Date | undefined = undefined
@@ -65,7 +77,7 @@ rotasInterface.get('/export', async (req: Request, res: Response) => {
     }
 
     try{
-        const pedidos = await obterPedidos({enviado, dataInicio, dataFinal})
+        const pedidos = await obterPedidos({enviado, dataInicio, dataFinal, numeroNota})
         const novosPedidos = pedidos?.map(p => {return {
             ...p,
             nota_enviada_BT: p.nota_enviada_BT === null ? "" : !!p.nota_enviada_BT ? "Sim" : "Não"

@@ -32,7 +32,8 @@ export async function salvarPedidoMercadoLivre(userId: number, orderId: number, 
 interface PedidosFiltros{
     enviado?: boolean,
     dataInicio?: Date,
-    dataFinal?: Date
+    dataFinal?: Date,
+    numeroNota?: number
 }
 
 export async function obterPedidos(filtros?: PedidosFiltros){
@@ -43,6 +44,7 @@ export async function obterPedidos(filtros?: PedidosFiltros){
             .input("nota_enviada_BT", filtros?.enviado)
             .input("data_envio_de_DT", filtros?.dataInicio)
             .input("data_envio_ate_DT", filtros?.dataFinal)
+            .input("numero_nota_NM", filtros?.numeroNota)
             .execute<PedidoMercadoLivre[]>('ObterPedidos')
         
             if (result.recordset.length > 0){
