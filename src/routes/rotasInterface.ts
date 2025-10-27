@@ -3,40 +3,17 @@ import { obterPedidos } from "../modules/db/pedido";
 import { formatarData } from "../modules/formatters";
 import { Logger } from "../modules/Logger";
 import ExcelJS from 'exceljs';
+import { queryBoolean, queryDate, queryNumber } from "../modules/util/query";
 
 const rotasInterface = Router()
 
 rotasInterface.get("/", async (req: Request, res: Response) => {
-    const enviadoQuery = String(req.query.enviado).toLowerCase()
-    const numeroNotaQuery = String(req.query.numeroNota).trim()
-    const orderIdQuery = String(req.query.orderId).trim()
+    const enviado = queryBoolean(String(req.query.enviado))
+    const numeroNota = queryNumber(String(req.query.numeroNota))
+    const orderId = queryNumber(String(req.query.orderId))
 
-    let enviado: boolean | undefined
-    if(["true", "yes", "y", "1"].includes(enviadoQuery)){
-        enviado = true
-    }else if(["false", "no", "n", "0"].includes(enviadoQuery)){
-        enviado = false
-    }
-
-    let numeroNota: number | undefined
-    if(numeroNotaQuery !== '' && /^[a-zA-Z0-9]+$/.test(numeroNotaQuery)){
-        numeroNota = parseInt(numeroNotaQuery)
-    }
-
-    let orderId: number | undefined
-    if(orderIdQuery !== '' && /^[a-zA-Z0-9]+$/.test(orderIdQuery)){
-        orderId = parseInt(orderIdQuery)
-    }
-
-    let dataInicio: Date | undefined = undefined
-    let dataFinal: Date | undefined = undefined
-    if(req.query.dataInicio){
-        dataInicio = new Date(String(req.query.dataInicio))
-    }
-
-    if(req.query.dataFinal){
-        dataFinal = new Date(String(req.query.dataFinal))
-    }
+    const dataInicio = queryDate(String(req.query.dataInicio))
+    const dataFinal = queryDate(String(req.query.dataFinal))
 
     try{
         const pedidos = await obterPedidos({enviado, dataInicio, dataFinal, numeroNota, orderId})
@@ -59,36 +36,12 @@ rotasInterface.get("/", async (req: Request, res: Response) => {
 })
 
 rotasInterface.get('/export', async (req: Request, res: Response) => {
-    const enviadoQuery = String(req.query.enviado).toLowerCase()
-    const numeroNotaQuery = String(req.query.numeroNota).trim()
-    const orderIdQuery = String(req.query.orderId).trim()
+    const enviado = queryBoolean(String(req.query.enviado))
+    const numeroNota = queryNumber(String(req.query.numeroNota))
+    const orderId = queryNumber(String(req.query.orderId))
 
-    let enviado: boolean | undefined
-    if(["true", "yes", "y", "1"].includes(enviadoQuery)){
-        enviado = true
-    }else if(["false", "no", "n", "0"].includes(enviadoQuery)){
-        enviado = false
-    }
-
-    let numeroNota: number | undefined
-    if(numeroNotaQuery !== ''){
-        numeroNota = parseInt(numeroNotaQuery)
-    }
-
-    let orderId: number | undefined
-    if(orderIdQuery !== '' && /^[a-zA-Z0-9]+$/.test(orderIdQuery)){
-        orderId = parseInt(orderIdQuery)
-    }
-
-    let dataInicio: Date | undefined = undefined
-    let dataFinal: Date | undefined = undefined
-    if(req.query.dataInicio){
-        dataInicio = new Date(String(req.query.dataInicio))
-    }
-
-    if(req.query.dataFinal){
-        dataFinal = new Date(String(req.query.dataFinal))
-    }
+    const dataInicio = queryDate(String(req.query.dataInicio))
+    const dataFinal = queryDate(String(req.query.dataFinal))
 
     try{
         const pedidos = await obterPedidos({enviado, dataInicio, dataFinal, numeroNota, orderId})
