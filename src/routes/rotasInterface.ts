@@ -1,22 +1,23 @@
 import { Router, Request, Response } from "express";
 import { obterPedidos } from "../modules/db/pedido";
-import { formatarData } from "../modules/formatters";
+import { formatarData } from "../modules/util/formatters";
 import { Logger } from "../modules/Logger";
 import ExcelJS from 'exceljs';
-import { queryBoolean, queryDate, queryNumber } from "../modules/util/query";
+import { queryBoolean, queryDate, queryNumber, queryString } from "../modules/util/query";
 
 const rotasInterface = Router()
 
 rotasInterface.get("/", async (req: Request, res: Response) => {
-    const enviado = queryBoolean(String(req.query.enviado))
-    const numeroNota = queryNumber(String(req.query.numeroNota))
-    const orderId = queryNumber(String(req.query.orderId))
+    const enviado = queryBoolean(req.query.enviado)
+    const numeroNota = queryNumber(req.query.numeroNota)
+    const orderId = queryNumber(req.query.orderId)
+    const nomeCliente = queryString(req.query.nomeCliente)
 
-    const dataInicio = queryDate(String(req.query.dataInicio))
-    const dataFinal = queryDate(String(req.query.dataFinal))
+    const dataInicio = queryDate(req.query.dataInicio)
+    const dataFinal = queryDate(req.query.dataFinal)
 
     try{
-        const pedidos = await obterPedidos({enviado, dataInicio, dataFinal, numeroNota, orderId})
+        const pedidos = await obterPedidos({enviado, dataInicio, dataFinal, numeroNota, orderId, nomeCliente})
         const novosPedidos = pedidos?.map(p => {return {
             ...p,
             data_envio_DT: formatarData(p.data_envio_DT),
@@ -36,15 +37,16 @@ rotasInterface.get("/", async (req: Request, res: Response) => {
 })
 
 rotasInterface.get('/export', async (req: Request, res: Response) => {
-    const enviado = queryBoolean(String(req.query.enviado))
-    const numeroNota = queryNumber(String(req.query.numeroNota))
-    const orderId = queryNumber(String(req.query.orderId))
+    const enviado = queryBoolean(req.query.enviado)
+    const numeroNota = queryNumber(req.query.numeroNota)
+    const orderId = queryNumber(req.query.orderId)
+    const nomeCliente = queryString(req.query.nomeCliente)
 
-    const dataInicio = queryDate(String(req.query.dataInicio))
-    const dataFinal = queryDate(String(req.query.dataFinal))
+    const dataInicio = queryDate(req.query.dataInicio)
+    const dataFinal = queryDate(req.query.dataFinal)
 
     try{
-        const pedidos = await obterPedidos({enviado, dataInicio, dataFinal, numeroNota, orderId})
+        const pedidos = await obterPedidos({enviado, dataInicio, dataFinal, numeroNota, orderId, nomeCliente})
         const novosPedidos = pedidos?.map(p => {return {
             ...p,
             nota_enviada_BT: p.nota_enviada_BT === null ? "" : !!p.nota_enviada_BT ? "Sim" : "Não"

@@ -5,10 +5,14 @@
             <input class="border p-2 rounded" type="text" id="numeroNota" name="numeroNota" value="<%= query.numeroNota %>">
         </div>
         <div class="flex flex-col gap-2 justify-start">
-            <label for="orderId" class="text-start">Nº do pedido do Mercado Livre </label>
+            <label for="orderId" class="text-start">Nº do pedido do Mercado Livre</label>
             <input class="border p-2 rounded" type="text" id="numeroNota" name="orderId" value="<%= query.orderId %>">
         </div>
-        <div class="flex gap-4 items-center">
+        <div class="flex flex-col gap-2 justify-start">
+            <label for="nomeCliente" class="text-start">Cliente</label>
+            <input class="border p-2 rounded" type="text" id="nomeCliente" name="nomeCliente" value="<%= query.nomeCliente %>">
+        </div>
+        <div class="flex flex-col gap-2 items-start">
             <div>
                 <input type="radio" style="background-color: #fee708;" name="enviado" id="todos" value="" <%= query.enviado === '' || !query.enviado ? 'checked' : false %> >
                 <label for="todos" class="text-lg">Todos</label>
@@ -33,10 +37,10 @@
             </div>
         </div>
         <div class="space-x-4">
-            <a href="/" class="bg-[#fee708] text-black font-medium p-2 rounded-lg">Limpar</a>
+            <a href="/" class="bg-[#fee708] text-black font-medium p-4 rounded-lg">Limpar</a>
             
             <button
-            class="bg-[#fee708] text-black p-2 rounded-md my-4 hover:cursor-pointer font-medium"
+            class="bg-[#fee708] text-black p-4 rounded-md my-4 hover:cursor-pointer font-medium"
             type="submit"
             >
                 Filtrar
@@ -57,7 +61,7 @@
         const formData = new FormData(e.currentTarget)
 
         const novaUrl = new URL(window.location)
-        for (let filtroNome of ['cliente', 'enviado', 'dataInicio', 'dataFinal', 'numeroNota', 'orderId']){
+        for (let filtroNome of ['cliente', 'enviado', 'dataInicio', 'dataFinal', 'numeroNota', 'orderId', 'nomeCliente']){
             const filtro = formData.get(filtroNome)
             if (filtro){
                 novaUrl.searchParams.append(filtroNome, filtro)
@@ -69,7 +73,6 @@
 
     function recarregarSemFiltro(e){
         e.preventDefault()
-        console.log('sem filtro')
 
         const novaUrl = new URL(window.location.href)
         window.location.replace(novaUrl)

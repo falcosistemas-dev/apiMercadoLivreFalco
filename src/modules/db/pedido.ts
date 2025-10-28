@@ -34,7 +34,8 @@ interface PedidosFiltros{
     dataInicio?: Date,
     dataFinal?: Date,
     numeroNota?: number,
-    orderId?: number
+    orderId?: number,
+    nomeCliente?: string
 }
 
 export async function obterPedidos(filtros?: PedidosFiltros){
@@ -47,6 +48,7 @@ export async function obterPedidos(filtros?: PedidosFiltros){
             .input("data_envio_ate_DT", filtros?.dataFinal)
             .input("numero_nota_NM", filtros?.numeroNota)
             .input("order_id_NM", filtros?.orderId)
+            .input("nome_cliente_VC", filtros?.nomeCliente)
             .execute<PedidoMercadoLivre[]>('ObterPedidos')
         
             if (result.recordset.length > 0){

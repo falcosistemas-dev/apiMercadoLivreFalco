@@ -7,7 +7,7 @@ import { isAxiosError } from "axios";
 import obterMotivoFalhaEnvio from "./obterErroEnvioNota";
 import DatabaseError from "../db/DatabaseError";
 import { Logger } from "../Logger";
-import extrairInfoXml from "../xml";
+import extrairInfoXml from "../util/xml";
 
 export default class MLService{
     public async callback(code: string){

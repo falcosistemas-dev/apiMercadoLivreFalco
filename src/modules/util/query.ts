@@ -1,29 +1,46 @@
-export function queryNumber(param: string): number | undefined{
-    param = param.trim()
-    if (param !== '' && /^[0-9]+$/.test(param)){
-        return Number.parseInt(param)
+export function queryNumber(param: unknown): number | undefined{
+    let result = String(param).trim()
+
+    if (result !== '' && /^[0-9]+$/.test(result)){
+        return Number.parseInt(result)
     }
 }
 
-export function queryBoolean(param: string): boolean | undefined{
-    param = param.trim().toLocaleLowerCase()
-    if(['true', '1'].includes(param)){
+export function queryBoolean(param: unknown): boolean | undefined{
+    let result = String(param).trim().toLocaleLowerCase()
+
+    if(['true', '1'].includes(result)){
         return true
-    }else if(['false', '0'].includes(param)){
+    }else if(['false', '0'].includes(result)){
         return false
     }
 }
 
-export function queryDate(param: string): Date | undefined{
-    param = param.trim()
-    if(param === ''){
+export function queryDate(param: unknown): Date | undefined{
+    let result = String(param).trim()
+
+    if(result === ''){
         return
     }
 
-    const possibleDate = new Date(param)
+    const possibleDate = new Date(result)
     if(possibleDate.toString() === 'Invalid Date'){
         return
     }
 
     return possibleDate
+}
+
+export function queryString(param: unknown): string | undefined{
+    if(param === undefined){
+        return
+    }
+    
+    let result = String(param).trim()
+
+    if(result !== ''){
+        return result
+    }
+
+    return
 }

@@ -8,7 +8,7 @@ import rotasML from './routes/rotasML';
 import MLService from './modules/mercado-livre/MLService';
 import { Logger } from './modules/Logger';
 import rotasPedido from './routes/rotasPedido';
-import moverArquivo from './modules/moverArquivo';
+import moverArquivo from './modules/util/moverArquivo';
 import path from 'node:path';
 import rotasInterface from './routes/rotasInterface';
 
