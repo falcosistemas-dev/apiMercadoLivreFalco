@@ -1,0 +1,12 @@
+<%- include('header') %>
+
+<div class="mx-auto w-11/12 mt-8 space-y-4">
+    <h1 class="text-3xl font-medium">Ações</h1>
+    <button class="p-4 bg-[#fee708] rounded-lg font-medium cursor-pointer" id="retryButton">Tentar reenviar xml</button>
+</div>
+
+<script>
+document.getElementById("retryButton").addEventListener('click', async () => {
+      await fetch('/admin/retry', {method: 'POST'})
+})
+</script>
