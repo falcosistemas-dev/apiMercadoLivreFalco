@@ -1,4 +1,4 @@
-CREATE PROCEDURE AtualizarEnvioPedido
+CREATE OR ALTER PROCEDURE AtualizarEnvioPedido
     @order_id_NM NUMERIC,
     @nota_enviada_BT BIT,
     @observacao_VC VARCHAR(255),
@@ -18,3 +18,5 @@ BEGIN
         order_id_NM = @order_id_NM
 END;
 GO
+
+GRANT EXECUTE ON AtualizarEnvioPedido TO PUBLIC;

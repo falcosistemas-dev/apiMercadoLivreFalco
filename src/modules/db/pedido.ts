@@ -3,7 +3,7 @@ import { Logger } from "../Logger"
 import DatabaseError from "./DatabaseError"
 
 interface PedidoMercadoLivre {
-    id: number
+    id_IN: number
     order_id_NM: number
     id_vendedor_mercadolivre_NM: number
     shipment_id_NM: number | null

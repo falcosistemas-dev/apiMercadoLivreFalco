@@ -1,4 +1,4 @@
-CREATE PROCEDURE SalvarPedidoMercadoLivre
+CREATE OR ALTER PROCEDURE SalvarPedidoMercadoLivre
     @id_vendedor_mercadolivre_NM NUMERIC,
     @order_id_NM NUMERIC,
     @shipment_id_NM NUMERIC = NULL,
@@ -12,3 +12,5 @@ BEGIN
     END
 END;
 GO
+
+GRANT EXECUTE ON SalvarPedidoMercadoLivre TO PUBLIC;

@@ -43,12 +43,17 @@ DATABASE_NAME=database                    // Base de dados
 
 5. Para verificar se a api está sendo executada, insira o comando `pm2 list` e verifique se o item aparece com o nome "ml-api-falco" e com o status "online"
 
+## Contas dos vendedores
+Para que a sincronização ocorra é necessário que a conta de vendas do Mercado Livre faça login na API
+1. Com a API rodando, entre em localhost:3000/login. Você será redirecionado para o Mercado Livre para fazer o login
+2. Faça o login, se tudo der certo você será redirecionado para outra página escrito "Ok"
+
 ## Atualizando API
 Quando uma nova versão estiver disponível, basta puxá-la utilizando o fetch e pull do Git, compilar e reiniciar o serviço com pm2
 
 1. Pare o serviço pm2 com o comando `pm2 stop ml-api-falco`
 2. Compile com o comando dentro da pasta raiz do projeto com o comando `tsc`
-3. Dentro da pasta compilado, execute o serviço com o comando `pm2 start ml-api-falco` 
+3. Dentro da pasta compilado, execute o serviço com o comando `pm2 start ml-api-falco`
 
 ## Vendedor
 ```json

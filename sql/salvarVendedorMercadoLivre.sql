@@ -1,4 +1,4 @@
-CREATE PROCEDURE SalvarVendedorMercadoLivre
+CREATE OR ALTER PROCEDURE SalvarVendedorMercadoLivre
     @id_mercadolivre_NM NUMERIC,
     @refresh_token_VC VARCHAR(100)
 AS
@@ -16,3 +16,5 @@ BEGIN
     END
 END;
 GO
+
+GRANT EXECUTE ON SalvarVendedorMercadoLivre TO PUBLIC;

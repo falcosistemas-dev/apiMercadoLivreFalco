@@ -1,4 +1,4 @@
-CREATE PROCEDURE ObterVendedorPorId
+CREATE OR ALTER PROCEDURE ObterVendedorPorId
     @id_mercadolivre_NM NUMERIC
 AS
 BEGIN
@@ -10,3 +10,5 @@ BEGIN
     FROM vendedores_mercadolivre_T
     WHERE id_mercadolivre_NM = @id_mercadolivre_NM;
 END;
+
+GRANT EXECUTE ON ObterVendedorPorId TO PUBLIC;

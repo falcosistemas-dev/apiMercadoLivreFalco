@@ -1,4 +1,4 @@
-CREATE PROCEDURE ObterPedidos
+CREATE OR ALTER PROCEDURE ObterPedidos
     @nota_enviada_BT BIT = NULL,
     @data_envio_de_DT DATE = NULL,
     @data_envio_ate_DT DATE = NULL,
@@ -10,7 +10,7 @@ BEGIN
     SET NOCOUNT ON;
 
     SELECT
-        id_NM,
+        id_IN,
         order_id_NM,
         id_vendedor_mercadolivre_NM,
         shipment_id_NM,
@@ -27,3 +27,5 @@ BEGIN
         AND (@order_id_NM IS NULL OR order_id_NM = @order_id_NM)
         AND (@nome_cliente_VC IS NULL OR nome_cliente_VC = @nome_cliente_VC);
 END;
+
+GRANT EXECUTE ON ObterPedidos TO PUBLIC;

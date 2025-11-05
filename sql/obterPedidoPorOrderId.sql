@@ -1,11 +1,11 @@
-CREATE PROCEDURE ObterPedidoPorOrderId
+CREATE OR ALTER PROCEDURE ObterPedidoPorOrderId
     @order_id_NM NUMERIC
 AS
 BEGIN
     SET NOCOUNT ON;
 
     SELECT
-        id_NM,
+        id_IN,
         order_id_NM,
         id_vendedor_mercadolivre_NM,
         shipment_id_NM,
@@ -17,3 +17,5 @@ BEGIN
     FROM pedidos_mercadolivre_T
     WHERE order_id_NM = @order_id_NM;
 END;
+
+GRANT EXECUTE ON ObterPedidoPorOrderId TO PUBLIC;
