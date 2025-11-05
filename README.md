@@ -18,7 +18,7 @@
 
 6. Ainda no terminal, execute o comando `npm install pm2 -g`
 
-7. Agora precisamos compilar nosso projeto. Para isso, digite o comando `npx tsc`. Isso criará uma pasta chamada "compilado"
+7. Agora precisamos compilar nosso projeto. Para isso, digite o comando `npm run build`. Isso criará uma pasta chamada "compilado"
 
 ## Configuração
 1. Copie o arquivo ".env.example" para dentro da pasta "compilado" e renomeie para ".env"
@@ -52,7 +52,7 @@ Para que a sincronização ocorra é necessário que a conta de vendas do Mercad
 Quando uma nova versão estiver disponível, basta puxá-la utilizando o fetch e pull do Git, compilar e reiniciar o serviço com pm2
 
 1. Pare o serviço pm2 com o comando `pm2 stop ml-api-falco`
-2. Compile com o comando dentro da pasta raiz do projeto com o comando `tsc`
+2. Compile com o comando dentro da pasta raiz do projeto com o comando `npm run build`
 3. Dentro da pasta compilado, execute o serviço com o comando `pm2 start ml-api-falco`
 
 ## Vendedor

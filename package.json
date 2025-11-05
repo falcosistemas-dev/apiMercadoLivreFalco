@@ -4,7 +4,8 @@
   "description": "",
   "scripts": {
     "dev": "ts-node-dev src/server.ts",
-    "build": "tsc"
+    "build": "tsc && npm run copy-assets",
+    "copy-assets": "xcopy src\\views compilado\\views /E /I /Y && xcopy src\\public compilado\\public /E /I /Y"
   },
   "keywords": [],
   "author": "",
