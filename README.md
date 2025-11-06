@@ -12,7 +12,7 @@
 
 4. Digite `cmd` e dê **Enter**. Isso abrirá o terminal já no caminho certo do projeto.
 
-5. No terminal, digite o comando `npm install` e aguarde. Quando o comando for finalizado, você verá que uma nova pasta chamada "node_modules foi criada"
+5. No terminal, digite o comando `npm install` e aguarde. Quando o comando for finalizado, você verá que uma nova pasta chamada "node_modules" foi criada
 
 ![npm install finalizado](./docs/npm-install.png)
 
@@ -39,9 +39,9 @@ DATABASE_NAME=database                    // Base de dados
 
 3. Entre na pasta "compilado" pelo terminal. Você pode fazer isso repetindo o passo 3 da etapa anterior
 
-4. Execute o comando `pm2 start server.js --name ml-api-falco` para rodar a API
+4. Execute o comando `pm2 start server.js --name importador-xml-mercado-livre` para rodar a API
 
-5. Para verificar se a api está sendo executada, insira o comando `pm2 list` e verifique se o item aparece com o nome "ml-api-falco" e com o status "online"
+5. Para verificar se a api está sendo executada, insira o comando `pm2 list` e verifique se o item aparece com o nome "importador-xml-mercado-livre" e com o status "online"
 
 ## Contas dos vendedores
 Para que a sincronização ocorra é necessário que a conta de vendas do Mercado Livre faça login na API
@@ -51,9 +51,9 @@ Para que a sincronização ocorra é necessário que a conta de vendas do Mercad
 ## Atualizando API
 Quando uma nova versão estiver disponível, basta puxá-la utilizando o fetch e pull do Git, compilar e reiniciar o serviço com pm2
 
-1. Pare o serviço pm2 com o comando `pm2 stop ml-api-falco`
+1. Pare o serviço pm2 com o comando `pm2 stop importador-xml-mercado-livre`
 2. Compile com o comando dentro da pasta raiz do projeto com o comando `npm run build`
-3. Dentro da pasta compilado, execute o serviço com o comando `pm2 start ml-api-falco`
+3. Dentro da pasta compilado, execute o serviço com o comando `pm2 start importador-xml-mercado-livre`
 
 ## Vendedor
 ```json
