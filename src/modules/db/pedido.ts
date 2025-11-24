@@ -84,7 +84,7 @@ export async function obterPedidoPorId(id: number): Promise<PedidoMercadoLivre |
     try{
         const result = await pool
             .request()
-            .input("id_NM", id)
+            .input("id_IN", id)
             .execute<PedidoMercadoLivre>("ObterPedidoPorId")
         
         if (result.recordset.length > 0){

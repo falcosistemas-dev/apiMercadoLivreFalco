@@ -25,7 +25,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
 
-const watcher = chokidar.watch(globais.CAMINHO_NFE, {ignored: (file) => !file.endsWith('xml')})
+const watcher = chokidar.watch(globais.CAMINHO_NFE)
 watcher.on("add", onAddFile);
 
 // Executa o localtunnel

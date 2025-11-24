@@ -60,7 +60,7 @@ rotasInterface.get('/export', async (req: Request, res: Response) => {
         const worksheet = workbook.addWorksheet('NFe')
 
         worksheet.columns = [
-            {header: 'id', key: 'id_NM'},
+            {header: 'id', key: 'id_IN'},
             {header: 'Nº Nota', key: 'numero_nota_NM', width: 10},
             {header: 'Nº do pedido ML', key: 'order_id_NM', width: 25 },
             {header: 'Cliente', key: 'nome_cliente_VC', width: 50},

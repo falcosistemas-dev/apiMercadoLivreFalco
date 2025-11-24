@@ -14,14 +14,18 @@ export async function moveFile(origem: string, destino: string){
 }
 
 export async function onAddFile(filepath: string){
-    if(filepath.match(/\d+/)){
+    const filename = path.basename(filepath, ".xml");
+
+    if(filename.match(/^\d+$/) && filepath.endsWith('.xml')){
         const mlService = new MLService()
-        const orderId = Number.parseInt(filepath.replace(/\D/g, ""))
+        const orderId = Number.parseInt(filename)
         const content = await readFile(filepath, 'utf-8')
     
         const {success} = await mlService.enviarNota(orderId, content)
         if(success){
             await moveFile(filepath, path.join(globais.CAMINHO_NFE, "enviado", orderId + ".xml"))
+        }else{
+            Logger.error('Erro ao enviar nota')
         }
     }
 }
