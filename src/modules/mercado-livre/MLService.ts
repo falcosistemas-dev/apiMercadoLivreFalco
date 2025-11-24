@@ -69,7 +69,15 @@ export default class MLService{
         const nfeInfo = await extrairInfoXml(content)
         try{
             const pedido = await obterPedidoPorOrderId(orderId)
+            if (!pedido){
+                throw new Error("Pedido não encontrado no banco de dados")
+            }
+
             const accessToken = await TokenService.obterToken(pedido?.id_vendedor_mercadolivre_NM as number)
+            if (!accessToken){
+                throw new Error("Nenhum vendedor relacionado a esse pedido foi encontrado")
+            }
+            
             const shipmentId = pedido?.shipment_id_NM as number
             
             await MLApi.post(`/shipments/${shipmentId}/invoice_data/?siteId=MLB`, content, {
