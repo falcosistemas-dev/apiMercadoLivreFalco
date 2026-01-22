@@ -26,18 +26,9 @@ app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
 
 const watcher = chokidar.watch(globais.CAMINHO_NFE)
+console.log(Number(globais.PORT))
 watcher.on("add", onAddFile);
 
-// Executa o localtunnel
-(async () => {
-  const tunnel = await localtunnel({ port: 3000, subdomain: "falcotestes" });
-  tunnel.url;
-
-  tunnel.on("close", () => {
-    Logger.info("Tunel fechado")
-  });
-})()
-
-app.listen(3000, () => {
-    Logger.info("Servidor rodando na porta 3000")
+app.listen(Number(globais.PORT), () => {
+    Logger.info(`Servidor rodando na porta ${globais.PORT}`)
 })

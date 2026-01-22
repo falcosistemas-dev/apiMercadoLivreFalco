@@ -18,5 +18,6 @@ export const globais = {
     CAMINHO_NFE: getEnvVar("CAMINHO_NFE"),
     CLIENT_ID: getEnvVar("CLIENT_ID"),
     CLIENT_SECRET: getEnvVar("CLIENT_SECRET"),
-    REDIRECT_URI: getEnvVar("REDIRECT_URI")
+    REDIRECT_URI: getEnvVar("REDIRECT_URI"),
+    PORT: getEnvVar("PORT")
 }
