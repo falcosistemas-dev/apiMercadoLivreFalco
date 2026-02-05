@@ -15,7 +15,7 @@ function log(level: LogLevel, message: string, context?: any) {
     console.log(formatted);
   }
 
-  appendFileSync(logFile, formatted+'\n', { encoding: "utf-8" });
+  appendFileSync(logFile, formatted+'\r\n', { encoding: "utf-8" });
 }
 
 export const Logger = {
