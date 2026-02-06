@@ -21,7 +21,6 @@ rotasInterface.get("/", async (req: Request, res: Response) => {
         const pedidos = await obterPedidos({enviado, dataInicio, dataFinal, numeroNota, orderId, nomeCliente})
         const novosPedidos = pedidos?.map(p => {return {
             ...p,
-            pedido_no_falco_BT: p.pedido_no_falco_BT ? "Sim": "Não",
             data_envio_DT: formatarData(p.data_envio_DT),
             nota_enviada_BT: p.nota_enviada_BT === null ? "" : !!p.nota_enviada_BT ? "Sim" : "Não"
         }
