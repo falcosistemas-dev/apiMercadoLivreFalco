@@ -8,6 +8,7 @@ interface PedidoMercadoLivre {
     id_vendedor_mercadolivre_NM: number
     shipment_id_NM: number | null
     nota_enviada_BT: boolean | null
+    pedido_no_falco_BT: boolean
     observacao_VC: string | null
     data_envio_DT: string | null
     numero_nota_NM: string | null
@@ -31,6 +32,7 @@ export async function salvarPedidoMercadoLivre(userId: number, orderId: number, 
 
 interface PedidosFiltros{
     enviado?: boolean,
+    pedidoNoFalco?: boolean,
     dataInicio?: Date,
     dataFinal?: Date,
     numeroNota?: number,
@@ -44,6 +46,7 @@ export async function obterPedidos(filtros?: PedidosFiltros){
         const result = await pool
             .request()
             .input("nota_enviada_BT", filtros?.enviado)
+            .input("pedido_no_falco_BT", filtros?.pedidoNoFalco)
             .input("data_envio_de_DT", filtros?.dataInicio)
             .input("data_envio_ate_DT", filtros?.dataFinal)
             .input("numero_nota_NM", filtros?.numeroNota)

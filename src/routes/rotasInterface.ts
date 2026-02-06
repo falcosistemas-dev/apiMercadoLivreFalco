@@ -2,10 +2,8 @@ import { Router, Request, Response } from "express";
 import { obterPedidos } from "../modules/db/pedido";
 import { formatarData } from "../modules/util/formatters";
 import { Logger } from "../modules/Logger";
-import fs from "fs/promises";
 import ExcelJS from 'exceljs';
 import { queryBoolean, queryDate, queryNumber, queryString } from "../modules/util/query";
-import { globais } from "../globais";
 import { retryAll } from "../modules/arquivo";
 
 const rotasInterface = Router()

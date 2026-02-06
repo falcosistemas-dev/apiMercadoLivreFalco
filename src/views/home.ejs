@@ -5,8 +5,9 @@
     <%- include('filtros', {query}) %>
     <% if (!!pedidos) { %>
         <div class="text-center w-10/12 mt-8 mx-auto divide-y divide-slate-300 border border-slate-300 rounded-lg">
-            <div class="grid [grid-template-columns:0.25fr_0.375fr_0.75fr_2.25fr_1fr_0.5fr_2fr] items-center bg-[#fee708] rounded-t-lg divide-x divide-slate-200">
+            <div class="grid [grid-template-columns:0.25fr_0.25fr_0.375fr_0.75fr_2.25fr_1fr_0.5fr_2fr] items-center bg-[#fee708] rounded-t-lg divide-x divide-slate-200">
                 <span class="py-3 font-medium">Id</span>
+                <span class="py-3 font-medium">Pedido no Falco</span>
                 <span class="py-3 font-medium">Nº nota</span>
                 <span class="py-3 font-medium">Nº do pedido ML</span>
                 <span class="py-3 font-medium">Cliente</span>
@@ -15,8 +16,9 @@
                 <span class="py-3 font-medium">Observação</span>
             </div>
             <% for( const pedido of pedidos ) { %>
-                <div class="grid [grid-template-columns:0.25fr_0.375fr_0.75fr_2.25fr_1fr_0.5fr_2fr] divide-x divide-slate-300">
+                <div class="grid [grid-template-columns:0.25fr_0.25fr_0.375fr_0.75fr_2.25fr_1fr_0.5fr_2fr] divide-x divide-slate-300">
                     <span><%= pedido.id_IN %></span>
+                    <span><%= pedido.pedido_no_falco_BT %></span>
                     <span><%= pedido.numero_nota_NM %></span>
                     <span><%= pedido.order_id_NM %></span>
                     <span><%= pedido.nome_cliente_VC %></span>

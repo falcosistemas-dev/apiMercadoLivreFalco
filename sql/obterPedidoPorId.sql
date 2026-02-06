@@ -10,6 +10,7 @@ BEGIN
         id_vendedor_mercadolivre_NM,
         shipment_id_NM,
         nota_enviada_BT,
+        pedido_no_falco_BT,
         observacao_VC,
         numero_nota_NM,
         nome_cliente_VC,
