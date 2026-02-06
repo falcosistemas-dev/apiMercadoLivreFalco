@@ -4,6 +4,7 @@ CREATE TABLE pedidos_mercadolivre_T(
     shipment_id_NM NUMERIC NULL,
     id_vendedor_mercadolivre_NM NUMERIC NOT NULL,
     nota_enviada_BT BIT NULL,
+    pedido_no_falco_BT BIT NOT NULL DEFAULT 0,
     observacao_VC VARCHAR(255) NULL,
     data_envio_DT DATETIME NULL,
     numero_nota_NM NUMERIC NULL,
