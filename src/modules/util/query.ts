@@ -1,3 +1,27 @@
+export function extractFiltersFromQuery(query: any){
+    const enviado = queryBoolean(query.enviado)
+    const numeroNota = queryNumber(query.numeroNota)
+    const orderId = queryNumber(query.orderId)
+    const nomeCliente = queryString(query.nomeCliente)
+
+    const dataInicio = queryDate(query.dataInicio)
+    const dataFinal = queryDate(query.dataFinal)
+
+    const pedidoNoFalco = queryBoolean(query.pedidoNoFalco)
+    const numeroPedidoFalco = queryNumber(query.numeroPedidoFalco)
+
+    return {
+        enviado,
+        numeroNota,
+        orderId,
+        nomeCliente,
+        dataInicio,
+        dataFinal,
+        pedidoNoFalco,
+        numeroPedidoFalco
+    }
+}
+
 export function queryNumber(param: unknown): number | undefined{
     let result = String(param).trim()
 

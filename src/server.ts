@@ -25,7 +25,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
 
-const watcher = chokidar.watch(globais.CAMINHO_NFE)
+const watcher = chokidar.watch(globais.CAMINHO_NFE, {depth: 0})
 console.log(Number(globais.PORT))
 watcher.on("add", onAddFile);
 

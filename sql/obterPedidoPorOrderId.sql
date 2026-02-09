@@ -11,6 +11,7 @@ BEGIN
         shipment_id_NM,
         nota_enviada_BT,
         pedido_no_falco_BT,
+        numero_pedido_falco_IN,
         observacao_VC,
         numero_nota_NM,
         nome_cliente_VC,

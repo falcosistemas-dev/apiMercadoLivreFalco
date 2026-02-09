@@ -2,7 +2,7 @@ import { getPool } from "../../db"
 import { Logger } from "../Logger"
 import DatabaseError from "./DatabaseError"
 
-interface PedidoMercadoLivre {
+export interface PedidoMercadoLivre {
     id_IN: number
     order_id_NM: number
     id_vendedor_mercadolivre_NM: number
@@ -31,12 +31,13 @@ export async function salvarPedidoMercadoLivre(userId: number, orderId: number, 
 }
 
 interface PedidosFiltros{
-    enviado?: boolean,
-    pedidoNoFalco?: boolean,
-    dataInicio?: Date,
-    dataFinal?: Date,
-    numeroNota?: number,
-    orderId?: number,
+    enviado?: boolean
+    pedidoNoFalco?: boolean
+    numeroPedidoFalco?: number
+    dataInicio?: Date
+    dataFinal?: Date
+    numeroNota?: number
+    orderId?: number
     nomeCliente?: string
 }
 
@@ -47,6 +48,7 @@ export async function obterPedidos(filtros?: PedidosFiltros){
             .request()
             .input("nota_enviada_BT", filtros?.enviado)
             .input("pedido_no_falco_BT", filtros?.pedidoNoFalco)
+            .input("numero_pedido_falco_IN", filtros?.numeroPedidoFalco)
             .input("data_envio_de_DT", filtros?.dataInicio)
             .input("data_envio_ate_DT", filtros?.dataFinal)
             .input("numero_nota_NM", filtros?.numeroNota)

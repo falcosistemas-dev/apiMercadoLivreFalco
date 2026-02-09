@@ -1,31 +1,51 @@
 <div class="flex flex-col items-center justify-center gap-2 mx-auto mb-4">
     <form class="flex flex-wrap justify-around gap-y-10 w-full" onsubmit="recarregarComFiltro">
-        <div class="flex gap-2">
-            <div class="flex flex-col gap-2">
+        <div class="flex gap-2 flex-wrap justify-around *:flex *:flex-col *:gap-2">
+            <div>
                 <label for="numeroNota" class="text-start">Nº da nota</label>
                 <input class="border p-2 rounded" type="text" id="numeroNota" name="numeroNota" value="<%= query.numeroNota %>">
             </div>
-            <div class="flex flex-col gap-2">
-                <label for="orderId" class="text-start text-nowrap">Nº do pedido do Mercado Livre</label>
+            <div>
+                <label for="orderId" class="text-start text-nowrap">Nº Pedido no Mercado Livre</label>
                 <input class="border p-2 rounded" type="text" id="numeroNota" name="orderId" value="<%= query.orderId %>">
             </div>
-            <div class="flex flex-col gap-2">
+            <div>
+                <label for="numeroPedidoFalco" class="text-start">Nº Pedido Falco</label>
+                <input class="border p-2 rounded" type="text" id="numeroPedidoFalco" name="numeroPedidoFalco" value="<%= query.numeroPedidoFalco %>">
+            </div>
+            <div>
                 <label for="nomeCliente" class="text-start">Cliente</label>
                 <input class="border p-2 rounded" type="text" id="nomeCliente" name="nomeCliente" value="<%= query.nomeCliente %>">
             </div>
         </div>
         <div class="flex flex-col gap-2 items-start justify-around">
+            <p>Status de envio</p>
             <div>
-                <input type="radio" style="background-color: #fee708;" name="enviado" id="todos" value="" <%= query.enviado === '' || !query.enviado ? 'checked' : false %> >
-                <label for="todos" class="text-lg">Todos</label>
+                <input type="radio" style="background-color: #fee708;" name="enviado" id="todosEnviado" value="" <%= query.enviado === '' || !query.enviado ? 'checked' : false %> >
+                <label for="todosEnviado" class="text-lg">Todos</label>
             </div>
             <div class="text-nowrap">
                 <input type="radio" class="checked:bg-[#fee708] checked:text-[#fee708]" name="enviado" id="sucesso" value="true" <%= query.enviado === 'true' ? 'checked' : false %> >
-                <label for="sucesso" class="text-lg text-nowrap">Enviados com sucesso</label>
+                <label for="sucesso" class="text-lg text-nowrap">Enviados</label>
             </div>
             <div>
                 <input type="radio" class="checked:bg-[#fee708] checked:text-[#fee708]" name="enviado" id="falhou" value="false" <%= query.enviado === 'false' ? 'checked' : false %> >
                 <label for="falhou" class="text-lg">Não enviados</label>
+            </div>
+        </div>
+        <div class="flex flex-col gap-2 items-start justify-around">
+            <p>Pedido no Falco?</p>
+            <div>
+                <input type="radio" style="background-color: #fee708;" name="pedidoNoFalco" id="todos" value="" <%= query.pedidoNoFalco === '' || !query.pedidoNoFalco ? 'checked' : false %> >
+                <label for="todos" class="text-lg">Todos</label>
+            </div>
+            <div class="text-nowrap">
+                <input type="radio" class="checked:bg-[#fee708] checked:text-[#fee708]" name="pedidoNoFalco" id="dentro" value="true" <%= query.pedidoNoFalco === 'true' ? 'checked' : false %> >
+                <label for="dentro" class="text-lg text-nowrap">Sim</label>
+            </div>
+            <div>
+                <input type="radio" class="checked:bg-[#fee708] checked:text-[#fee708]" name="pedidoNoFalco" id="fora" value="false" <%= query.pedidoNoFalco === 'false' ? 'checked' : false %> >
+                <label for="fora" class="text-lg">Não</label>
             </div>
         </div>
         <div class="flex flex-col gap-2">
@@ -63,7 +83,7 @@
         const formData = new FormData(e.currentTarget)
 
         const novaUrl = new URL(window.location)
-        for (let filtroNome of ['cliente', 'enviado', 'dataInicio', 'dataFinal', 'numeroNota', 'orderId', 'nomeCliente']){
+        for (let filtroNome of formData.keys()){
             const filtro = formData.get(filtroNome)
             if (filtro){
                 novaUrl.searchParams.append(filtroNome, filtro)

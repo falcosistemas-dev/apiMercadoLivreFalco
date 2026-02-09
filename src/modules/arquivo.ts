@@ -31,11 +31,11 @@ export async function onAddFile(filepath: string){
 }
 
 export async function retryAll(){
-    const arquivos = await fs.readdir(globais.CAMINHO_NFE);
+    const arquivos = await fs.readdir(globais.CAMINHO_NFE, {recursive: false});
     Logger.info("Tentando reenviar arquivos xml")
     for (let arq of arquivos){
         if(arq.endsWith('xml') && arq.match(/\d+/)){
-            onAddFile(arq)
+            onAddFile(path.join(globais.CAMINHO_NFE, arq))
         }
     }
 }
