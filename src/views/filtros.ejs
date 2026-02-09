@@ -69,7 +69,17 @@
             </button>
         </div>
     </form>
-<a href="<%= '/export' + queryString %>" target="_blank" class="bg-[#fee708] text-black font-medium p-4 rounded-lg">Exportar dados</a>
+<a href="<%= '/export' + queryString %>" target="_blank" class="bg-[#fee708] text-black font-medium p-4 rounded-lg mb-6">Exportar dados</a>
+<div class="flex gap-4">
+    <div class="flex items-center gap-6">
+        <div class="size-3 mx-auto rounded-full" style="background-color: blue;"> </div>
+        <p>Pedido no FALCO</p>
+    </div>
+    <div class="flex items-center gap-6">
+        <div class="size-3 mx-auto rounded-full" style="background-color: yellow; width: 10px; height: 10px;"></div>
+        <p>Pedido fora do FALCO</p>
+    </div>
+</div>
 </div>
 
 <script>
