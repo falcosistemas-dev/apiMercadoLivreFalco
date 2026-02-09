@@ -1,25 +1,27 @@
-<div class="flex flex-col items-center justify-center gap-2 mx-auto mb-4 w-10/12">
-    <form class="flex items-center justify-between w-full" onsubmit="recarregarComFiltro">
-        <div class="flex flex-col gap-2 justify-start">
-            <label for="numeroNota" class="text-start">Nº da nota</label>
-            <input class="border p-2 rounded" type="text" id="numeroNota" name="numeroNota" value="<%= query.numeroNota %>">
+<div class="flex flex-col items-center justify-center gap-2 mx-auto mb-4">
+    <form class="flex flex-wrap justify-around gap-y-10 w-full" onsubmit="recarregarComFiltro">
+        <div class="flex gap-2">
+            <div class="flex flex-col gap-2">
+                <label for="numeroNota" class="text-start">Nº da nota</label>
+                <input class="border p-2 rounded" type="text" id="numeroNota" name="numeroNota" value="<%= query.numeroNota %>">
+            </div>
+            <div class="flex flex-col gap-2">
+                <label for="orderId" class="text-start text-nowrap">Nº do pedido do Mercado Livre</label>
+                <input class="border p-2 rounded" type="text" id="numeroNota" name="orderId" value="<%= query.orderId %>">
+            </div>
+            <div class="flex flex-col gap-2">
+                <label for="nomeCliente" class="text-start">Cliente</label>
+                <input class="border p-2 rounded" type="text" id="nomeCliente" name="nomeCliente" value="<%= query.nomeCliente %>">
+            </div>
         </div>
-        <div class="flex flex-col gap-2 justify-start">
-            <label for="orderId" class="text-start">Nº do pedido do Mercado Livre</label>
-            <input class="border p-2 rounded" type="text" id="numeroNota" name="orderId" value="<%= query.orderId %>">
-        </div>
-        <div class="flex flex-col gap-2 justify-start">
-            <label for="nomeCliente" class="text-start">Cliente</label>
-            <input class="border p-2 rounded" type="text" id="nomeCliente" name="nomeCliente" value="<%= query.nomeCliente %>">
-        </div>
-        <div class="flex flex-col gap-2 items-start">
+        <div class="flex flex-col gap-2 items-start justify-around">
             <div>
                 <input type="radio" style="background-color: #fee708;" name="enviado" id="todos" value="" <%= query.enviado === '' || !query.enviado ? 'checked' : false %> >
                 <label for="todos" class="text-lg">Todos</label>
             </div>
-            <div>
+            <div class="text-nowrap">
                 <input type="radio" class="checked:bg-[#fee708] checked:text-[#fee708]" name="enviado" id="sucesso" value="true" <%= query.enviado === 'true' ? 'checked' : false %> >
-                <label for="sucesso" class="text-lg">Enviados com sucesso</label>
+                <label for="sucesso" class="text-lg text-nowrap">Enviados com sucesso</label>
             </div>
             <div>
                 <input type="radio" class="checked:bg-[#fee708] checked:text-[#fee708]" name="enviado" id="falhou" value="false" <%= query.enviado === 'false' ? 'checked' : false %> >
@@ -27,11 +29,11 @@
             </div>
         </div>
         <div class="flex flex-col gap-2">
-            <div>
+            <div class="text-nowrap">
                 <label for="dataInicio">De: </label>
                 <input type="date" name="dataInicio" value="<%= query.dataInicio %>" >
             </div>
-            <div>
+            <div class="text-nowrap">
                 <label for="dataFinal">Até: </label>
                 <input type="date" name="dataFinal" value="<%= query.dataFinal %>">
             </div>

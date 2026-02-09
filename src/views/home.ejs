@@ -1,32 +1,40 @@
 <%- include('header') %>
 
 <div class="w-full text-center">
-    <h1 class="text-4xl text-center mb-10 bg-[#fee708] text-black font-medium p-4">Relatório de envio NF-e Mercado Livre</h1>
-    <%- include('filtros', {query}) %>
-    <% if (!!pedidos) { %>
-        <div class="text-center w-10/12 mt-8 mx-auto divide-y divide-slate-300 border border-slate-300 rounded-lg">
-            <div class="grid [grid-template-columns:0.25fr_0.25fr_0.375fr_0.75fr_2.25fr_1fr_0.5fr_2fr] items-center bg-[#fee708] rounded-t-lg divide-x divide-slate-200">
-                <span class="py-3 font-medium">Id</span>
-                <span class="py-3 font-medium">Status</span>
-                <span class="py-3 font-medium">Nº nota</span>
-                <span class="py-3 font-medium">Nº do pedido ML</span>
-                <span class="py-3 font-medium">Cliente</span>
-                <span class="py-3 font-medium">Data/hora</span>
-                <span class="py-3 font-medium">Sucesso</span>
-                <span class="py-3 font-medium">Observação</span>
-            </div>
-            <% for( const pedido of pedidos ) { %>
-                <div class="grid [grid-template-columns:0.25fr_0.25fr_0.375fr_0.75fr_2.25fr_1fr_0.5fr_2fr] items-center divide-x divide-slate-300">
-                    <span><%= pedido.id_IN %></span>
-                    <span style="width: 12px; height: 12px; border-radius: 50%; margin: 0 auto; background-color: <%= pedido.pedido_no_falco_BT ? 'blue': 'yellow' %>;"> </span>
-                    <span><%= pedido.numero_nota_NM %></span>
-                    <span><%= pedido.order_id_NM %></span>
-                    <span><%= pedido.nome_cliente_VC %></span>
-                    <span><%= pedido.data_envio_DT %></span>
-                    <span><%= pedido.nota_enviada_BT %></span>
-                    <span class="text-nowrap truncate"><%= pedido.observacao_VC %></span>
-                </div>
-            <% } %>
-    </table>
-    <% } %>
+    <h1 class="text-4xl text-center mb-10 bg-[#fee708] text-black font-medium py-4">Relatório de envio NF-e Mercado Livre</h1>
+    <div class="w-full xl:w-11/12 xl:w-10/12 mx-auto">
+        <%- include('filtros', {query}) %>
+        <% if (!!pedidos) { %>
+            <table class="w-full! mx-auto text-sm">
+                <thead class="bg-slate-600 rounded-lg">
+                    <tr class="bg-[#fee708] items-center rounded-t-lg rounded-lg">
+                        <th class="py-3 font-medium rounded-tl-lg">Id</th>
+                        <th class="py-3 font-medium w-fit">Status</th>
+                        <th class="py-3 font-medium">Nº nota</th>
+                        <th class="py-3 font-medium">Nº do pedido ML</th>
+                        <th class="py-3 font-medium">Cliente</th>
+                        <th class="py-3 font-medium">Data/hora</th>
+                        <th class="py-3 font-medium">Sucesso</th>
+                        <th class="py-3 font-medium rounded-tr-lg">Observação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for( const pedido of pedidos ) { %>
+                        <tr class="text-center *:border *:border-slate-300 *:py-1 text-wrap">
+                            <td><%= pedido.id_IN %></td>
+                            <td>
+                                <div class="size-3 mx-auto rounded-full" style="background-color: <%= pedido.pedido_no_falco_BT ? 'blue': 'yellow' %>;"></div>
+                            </td>
+                            <td><%= pedido.numero_nota_NM %></td>
+                            <td><%= pedido.order_id_NM %></td>
+                            <td class="truncate"><%= pedido.nome_cliente_VC %></td>
+                            <td class="truncate"><%= pedido.data_envio_DT %></td>
+                            <td><%= pedido.nota_enviada_BT %></td>
+                            <td class=""><%= pedido.observacao_VC %></td>
+                        </tr>
+                    <% } %>
+                </tbody>
+        </table>
+        <% } %>
+    </div>
 </div>
