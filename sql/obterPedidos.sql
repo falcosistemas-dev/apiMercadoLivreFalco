@@ -19,6 +19,7 @@ BEGIN
         nota_enviada_BT,
         pedido_no_falco_BT,
         numero_pedido_falco_IN,
+        data_pedido_falco_DT,
         observacao_VC,
         data_envio_DT,
         numero_nota_NM,

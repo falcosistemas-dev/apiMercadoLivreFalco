@@ -9,6 +9,7 @@ export interface PedidoMercadoLivre {
     shipment_id_NM: number | null
     nota_enviada_BT: boolean | null
     pedido_no_falco_BT: boolean
+    data_pedido_falco_DT: string | null
     observacao_VC: string | null
     data_envio_DT: string | null
     numero_nota_NM: string | null

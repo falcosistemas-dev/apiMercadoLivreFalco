@@ -13,6 +13,7 @@
                         <th class="py-3 font-medium">Nº nota</th>
                         <th class="py-3 font-medium">Nº Pedido ML</th>
                         <th class="py-3 font-medium">Nº Pedido FALCO</th>
+                        <th class="py-3 font-medium">Data Pedido Falco</th>
                         <th class="py-3 font-medium">Cliente</th>
                         <th class="py-3 font-medium">Data/hora</th>
                         <th class="py-3 font-medium">Sucesso</th>
@@ -29,6 +30,7 @@
                             <td><%= pedido.numero_nota_NM %></td>
                             <td><%= pedido.order_id_NM %></td>
                             <td><%= pedido.numero_pedido_falco_IN %></td>
+                            <td class="w-50"><%= new Date(pedido.data_pedido_falco_DT).toLocaleString('pt-BR') %></td>
                             <td class="truncate"><%= pedido.nome_cliente_VC %></td>
                             <td class="truncate"><%= pedido.data_envio_DT %></td>
                             <td><%= pedido.nota_enviada_BT %></td>
