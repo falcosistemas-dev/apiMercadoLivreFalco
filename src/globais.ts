@@ -19,5 +19,9 @@ export const globais = {
     CLIENT_ID: getEnvVar("CLIENT_ID"),
     CLIENT_SECRET: getEnvVar("CLIENT_SECRET"),
     REDIRECT_URI: getEnvVar("REDIRECT_URI"),
-    PORT: getEnvVar("PORT")
+    PORT: getEnvVar("PORT"),
+    RABBITMQ_PORT: getEnvVar("RABBITMQ_PORT"),
+    RABBITMQ_USER: getEnvVar("RABBITMQ_USER"),
+    RABBITMQ_PASS: getEnvVar("RABBITMQ_PASS"),
+    RABBITMQ_HOST: getEnvVar("RABBITMQ_HOST")
 }

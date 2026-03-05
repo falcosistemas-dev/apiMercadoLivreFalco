@@ -22,10 +22,12 @@ export async function onAddFile(filepath: string){
         const content = await readFile(filepath, 'utf-8')
     
         const {success} = await mlService.enviarNota(orderId, content)
+
         if(success){
             await moveFile(filepath, path.join(globais.CAMINHO_NFE, "enviado", orderId + ".xml").replace('C:', '\\'))
         }else{
             Logger.error('Erro ao enviar nota')
+            throw new Error("Erro ao enviar nota")
         }
     }
 }

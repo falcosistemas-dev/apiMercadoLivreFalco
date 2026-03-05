@@ -9,6 +9,7 @@ import rotasPedido from './routes/rotasPedido';
 import path from 'node:path';
 import rotasInterface from './routes/rotasInterface';
 import { onAddFile } from './modules/arquivo';
+import { SetupRabbitMQ } from './rabbitmq-setup';
 
 const app = express()
 
@@ -25,10 +26,33 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
 
-const watcher = chokidar.watch(globais.CAMINHO_NFE, {depth: 0})
-console.log(Number(globais.PORT))
-watcher.on("add", onAddFile);
 
-app.listen(Number(globais.PORT), () => {
-    Logger.info(`Servidor rodando na porta ${globais.PORT}`)
-})
+async function start() {
+
+    const rabbit = new SetupRabbitMQ()
+    await rabbit.init()
+
+    Logger.info("RabbitMQ conectado")
+
+    const watcher = chokidar.watch(globais.CAMINHO_NFE, {
+        depth: 0,
+        awaitWriteFinish: true
+    })
+
+    watcher.on("add", async (filePath) => {
+
+        console.log(filePath)
+
+        await rabbit.sendMessage(filePath)
+
+    })
+
+    await rabbit.consume(onAddFile)
+
+    app.listen(Number(globais.PORT), () => {
+        Logger.info(`Servidor rodando na porta ${globais.PORT}`)
+    })
+
+}
+
+start().catch(console.error)
