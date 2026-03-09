@@ -23,7 +23,8 @@ function pedidosMock(){
             observacao_VC: obs,
             data_envio_DT: new Date().toISOString(),
             numero_nota_NM: String(i+10),
-            nome_cliente_VC: cliente
+            nome_cliente_VC: cliente,
+            data_pedido_falco_DT: new Date().toISOString()
         })
     }
 
