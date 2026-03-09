@@ -1,4 +1,5 @@
 import dotenv from 'dotenv'
+import path from 'node:path';
 
 dotenv.config({quiet: true})
 
@@ -15,7 +16,7 @@ export const globais = {
     DATABASE_NAME: getEnvVar("DATABASE_NAME"),
     DATABASE_USER: getEnvVar("DATABASE_USER"),
     DATABASE_PASSWORD: getEnvVar("DATABASE_PASSWORD"),
-    CAMINHO_NFE: getEnvVar("CAMINHO_NFE"),
+    CAMINHO_NFE: path.normalize(getEnvVar("CAMINHO_NFE")),
     CLIENT_ID: getEnvVar("CLIENT_ID"),
     CLIENT_SECRET: getEnvVar("CLIENT_SECRET"),
     REDIRECT_URI: getEnvVar("REDIRECT_URI"),
