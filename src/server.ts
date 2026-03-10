@@ -36,7 +36,7 @@ watcher.on("add", async (filepath) => {
     }
 });
 
-const cronS = cron.schedule('* 10 * * * *', retryAll)
+const cronS = cron.schedule('*/10 * * * *', retryAll)
 
 app.listen(Number(globais.PORT), () => {
     Logger.info(`Servidor rodando na porta ${globais.PORT}`)
