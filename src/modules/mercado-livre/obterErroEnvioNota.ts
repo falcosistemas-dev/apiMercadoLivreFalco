@@ -48,3 +48,11 @@ export default function obterMotivoFalhaEnvio(e: AxiosError){
     return e.message
 
 }
+
+export function isMercadoLivreError(error: any): error is keyof typeof envioErros{    
+    if(Object.keys(envioErros).includes(error)){
+        return true
+    }
+    return false
+
+}

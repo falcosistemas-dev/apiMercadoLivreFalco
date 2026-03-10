@@ -3,8 +3,8 @@ import MLApi from "./MLApi";
 import { salvarVendedorMercadoLivre } from "../db/vendedor";
 import TokenService from "../TokenService";
 import { atualizarEnvioPedido, obterPedidoPorOrderId, salvarPedidoMercadoLivre } from "../db/pedido";
-import { isAxiosError } from "axios";
-import obterMotivoFalhaEnvio from "./obterErroEnvioNota";
+import axios, { isAxiosError } from "axios";
+import obterMotivoFalhaEnvio, { isMercadoLivreError } from "./obterErroEnvioNota";
 import DatabaseError from "../db/DatabaseError";
 import { Logger } from "../Logger";
 import extrairInfoXml from "../util/xml";
@@ -79,19 +79,40 @@ export default class MLService{
             }
             
             const shipmentId = pedido?.shipment_id_NM as number
-            
-            await MLApi.post(`/shipments/${shipmentId}/invoice_data/?siteId=MLB`, content, {
-                headers: {
-                    "Content-Type": "text/xml",
-                    Authorization: `Bearer ${accessToken}`
+
+            try{
+                await MLApi.post(`/shipments/${shipmentId}/invoice_data/?siteId=MLB`, content, {
+                    headers: {
+                        "Content-Type": "text/xml",
+                        Authorization: `Bearer ${accessToken}`
+                    }
+                })
+            }catch(e){
+                let motivoFalha = `Erro durante processamento da nota`
+                if(isAxiosError(e) && e.status === 400){
+                    const error = e.response?.data.error
+                    if(isMercadoLivreError(error) && error === 'invalid_shipment'){
+                        if(await this.existeNota(shipmentId, accessToken)){
+                            Logger.info(`Nota do pedido ${orderId} já possuía uma nota`)
+                            await this.atualizarEnvio(orderId, true, "Já havia uma nota para esse pedido", nfeInfo.nNota, nfeInfo.nomeCliente)
+                            return {success: true}
+                        }
+                        motivoFalha = obterMotivoFalhaEnvio(e)
+                        Logger.error(`Erro no envio da nota do pedido ${orderId}: ${motivoFalha}`, e.message)
+                        await this.atualizarEnvio(orderId, false, motivoFalha, nfeInfo.nNota, nfeInfo.nomeCliente)
+                        return {success: false}
+                    }
+                }else{
+                    throw e
                 }
-            })
+            }
+            
             Logger.info(`Nota do pedido ${orderId} enviada com sucesso`)
             await this.atualizarEnvio(orderId, true, "Nota enviada com sucesso", nfeInfo.nNota, nfeInfo.nomeCliente)
             return {success: true}
-        }catch(e: any){ 
+        }catch(e: any){
             let motivoFalha = `Erro durante processamento da nota`
-            if(isAxiosError(e) && e.status === 400){
+            if(isAxiosError(e)){
                 motivoFalha = obterMotivoFalhaEnvio(e)
                 Logger.error(`Erro no envio da nota do pedido ${orderId}: ${motivoFalha}`, e.message)
             }else if(e instanceof DatabaseError){
@@ -110,6 +131,18 @@ export default class MLService{
             await atualizarEnvioPedido(orderId, enviado, observacao, numeroNota, nomeCliente)
         }catch(e){
             Logger.error(`Erro ao atualizar nota do pedido ${orderId}`, e)
+        }
+    }
+
+    private async existeNota(shipmentId: number, accessToken: string){
+        try{
+            await MLApi.get(`/shipments/${shipmentId}/invoice_data`, {params: {siteId: 'MLB'}, headers: {Authorization: `Bearer ${accessToken}`} })
+            return true
+        }catch(e){
+            console.warn('erro no existe', e)
+            if(isAxiosError(e) && e.status === 404){
+                return false
+            }
         }
     }
 }
