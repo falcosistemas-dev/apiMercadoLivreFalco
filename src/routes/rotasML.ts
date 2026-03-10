@@ -3,6 +3,7 @@ import MLService from "../modules/mercado-livre/MLService";
 import { globais } from "../globais";
 import { isAxiosError } from "axios";
 import { Logger } from "../modules/Logger";
+import { notificationPublisher } from "../queues/notification-queue";
 
 const rotasML = Router()
 const mlService = new MLService()
@@ -33,18 +34,8 @@ rotasML.get("/callback", async (req: Request, res: Response) => {
 
 // Rota que recebe notificação quando um novo pedido/envio é criado
 rotasML.post("/notificacoes", async (req: Request, res: Response) => {
-    const userId = Number.parseInt(req.body.user_id)
-    const topic = String(req.body.topic)
-    const resource = String(req.body.resource)
-
-    try{
-        await mlService.notificacao(userId, topic, resource)
-        res.sendStatus(200)
-    }catch(e: any){
-        Logger.error(`Erro ao receber notificação: topic ${topic} - resource ${resource}`, e)
-        res.sendStatus(500)
-    }
-
+    await notificationPublisher.send('notification', req.body)
+    res.sendStatus(200)
 });
 
 export default rotasML;
