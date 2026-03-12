@@ -41,6 +41,3 @@ const cronS = cron.schedule('*/10 * * * *', retryAll)
 app.listen(Number(globais.PORT), () => {
     Logger.info(`Servidor rodando na porta ${globais.PORT}`)
 })
-
-cronS.destroy()
-mqConnection.close()

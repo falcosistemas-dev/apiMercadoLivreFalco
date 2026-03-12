@@ -18,6 +18,10 @@ const notificationConsumer = mqConnection.createConsumer({ queue: 'notification'
     }
 })
 
+notificationConsumer.on('ready', () => {
+    Logger.info('Notification consumer ready')
+})
+
 
 const notificationPublisher = mqConnection.createPublisher({confirm: true, maxAttempts: 2})
 
