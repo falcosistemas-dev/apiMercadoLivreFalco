@@ -32,7 +32,8 @@ BEGIN
         AND (@numero_pedido_falco_IN IS NULL OR numero_pedido_falco_IN = @numero_pedido_falco_IN)
         AND (@order_id_NM IS NULL OR order_id_NM = @order_id_NM)
         AND (@pedido_no_falco_BT IS NULL OR pedido_no_falco_BT = @pedido_no_falco_BT)
-        AND (@nome_cliente_VC IS NULL OR nome_cliente_VC = @nome_cliente_VC);
+        AND (@nome_cliente_VC IS NULL OR nome_cliente_VC = @nome_cliente_VC)
+    ORDER BY id_IN DESC;
 END;
 
 GRANT EXECUTE ON ObterPedidos TO PUBLIC;
