@@ -9,7 +9,7 @@ import { retryAll } from "../modules/arquivo";
 const rotasInterface = Router()
 
 rotasInterface.get("/", async (req: Request, res: Response) => {
-    const {
+    let {
         enviado,
         dataInicio,
         dataFinal,
@@ -21,11 +21,22 @@ rotasInterface.get("/", async (req: Request, res: Response) => {
     } = extractFiltersFromQuery(req.query)
 
     try{
+        if(!dataFinal){
+            dataFinal = new Date()
+        }
+
+        if(!dataInicio){
+            const newDate = new Date()
+            newDate.setDate(newDate.getDate() - 7)
+            dataInicio = newDate
+        }
+
         const pedidos = await obterPedidos({enviado, dataInicio, dataFinal, numeroNota, orderId, nomeCliente, pedidoNoFalco, numeroPedidoFalco})
         // const pedidos = pedidosMock()
         const novosPedidos = pedidos?.map(p => {return {
             ...p,
             data_envio_DT: formatarData(p.data_envio_DT),
+            data_pedido_falco_DT: formatarData(p.data_pedido_falco_DT),
             nota_enviada_BT: p.nota_enviada_BT === null ? "" : !!p.nota_enviada_BT ? "Sim" : "Não"
         }
         })
@@ -34,7 +45,12 @@ rotasInterface.get("/", async (req: Request, res: Response) => {
 
         const queryStringWithPrefix = queryString ? `?${queryString}` : '';
 
-        res.render('home', {pedidos: novosPedidos, query: req.query, queryString: queryStringWithPrefix});
+        const defaultValues = {
+            dataInicio: dataInicio.toISOString().split('T').at(0),
+            dataFinal: dataFinal.toISOString().split('T').at(0)
+        }
+
+        res.render('home', {pedidos: novosPedidos, query: req.query, queryString: queryStringWithPrefix, defaultValues});
     }catch(e: any){
         Logger.error(`Erro ao obter pedidos: ${e.originalError?.message || e.message || e}`, e)
         res.status(500).json({error: "Internal Server Error", message: "Erro ao obter pedido"})

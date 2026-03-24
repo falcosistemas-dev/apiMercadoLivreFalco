@@ -3,7 +3,7 @@
 <div class="w-full text-center">
     <h1 class="text-4xl text-center mb-10 bg-[#fee708] text-black font-medium py-4">Relatório de envio NF-e Mercado Livre</h1>
     <div class="w-full xl:w-11/12 xl:w-10/12 mx-auto">
-        <%- include('filtros', {query}) %>
+        <%- include('filtros', {query, defaultValues}) %>
         <% if (!!pedidos) { %>
             <table class="w-full! mx-auto text-sm">
                 <thead class="bg-slate-600 rounded-lg">
@@ -30,7 +30,7 @@
                             <td><%= pedido.numero_nota_NM %></td>
                             <td><%= pedido.order_id_NM %></td>
                             <td><%= pedido.numero_pedido_falco_IN %></td>
-                            <td class="w-50"><%= new Date(pedido.data_pedido_falco_DT).toLocaleString('pt-BR') %></td>
+                            <td class="w-50"><%= pedido.data_pedido_falco_DT %></td>
                             <td class="truncate"><%= pedido.nome_cliente_VC %></td>
                             <td class="truncate"><%= pedido.data_envio_DT %></td>
                             <td><%= pedido.nota_enviada_BT %></td>

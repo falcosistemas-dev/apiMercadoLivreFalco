@@ -51,11 +51,11 @@
         <div class="flex flex-col gap-2">
             <div class="text-nowrap">
                 <label for="dataInicio">De: </label>
-                <input type="date" name="dataInicio" value="<%= query.dataInicio %>" >
+                <input type="date" name="dataInicio" value="<%= query.dataInicio ?? defaultValues.dataInicio %>" >
             </div>
             <div class="text-nowrap">
                 <label for="dataFinal">Até: </label>
-                <input type="date" name="dataFinal" value="<%= query.dataFinal %>">
+                <input type="date" name="dataFinal" value="<%= query.dataFinal ?? defaultValues.dataFinal %>">
             </div>
         </div>
         <div class="space-x-4">
